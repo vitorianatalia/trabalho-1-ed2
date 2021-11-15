@@ -61,7 +61,7 @@ void File::readFile(vector<Review> *reviewList, string filename)
         reviewList->push_back(review);
         contador++;
     }
-
+    cout << reviewList->size() << endl;
     return;
 }
 
@@ -69,7 +69,7 @@ void File::writeTxt(vector<Review> *reviewList)
 {
     ofstream outputFile("teste.txt", std::ofstream::out | std::ofstream::trunc);
 
-    for (int i = 0; i < reviewList->size() - 1; i++)
+    for (int i = 0; i < reviewList->size(); i++)
     {
 
         outputFile << i + 1 << "- Linha" << endl;
@@ -125,7 +125,42 @@ void File::readBinary(vector<Review> *reviewList)
         contador++;
     }
 
+    cout << reviewList->size() << endl; 
+
+    for(int i=0; i < reviewList->size(); i++ ){
+        cout << "versao:" << reviewList->at(i).getAppVersion() << endl;
+        cout << "data:" << reviewList->at(i).getPostedDate() << endl;
+        cout << "id:" << reviewList->at(i).getReview_id() << endl;
+        cout << "texto:" << reviewList->at(i).getReview_text() << endl;
+        cout << "likes:" << reviewList->at(i).getUpvotes() << endl;
+        cout << endl;
+    }
+
     inputFile.close();
+}
+
+void File::acessaRegistro(int n)
+{
+    ifstream inputFile("teste.bin", ios::in | ios::binary);
+
+    if (!inputFile.is_open())
+    {
+        cout << "Error: Could not open file" << endl;
+        exit(1);
+    }
+
+    Review review;
+
+    int pos = (n-1)*sizeof(Review);
+    inputFile.seekg(pos);
+    inputFile.read(reinterpret_cast<char *>(&review), sizeof(Review));
+
+    cout << "ID: " << review.getReview_id() << endl;
+    cout << "Texto: " << review.getReview_text() << endl;
+    cout << "Votos: " << review.getUpvotes() << endl;
+    cout << "Versao: " << review.getAppVersion() << endl; 
+    cout << "Data: " << review.getPostedDate() << endl;
+    cout << endl;
 }
 
 // void File::testeImportacao(int input)
