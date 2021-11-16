@@ -7,9 +7,7 @@
 
 using namespace std;
 
-//what we need to work with: review_id, review_text, upvotes, app_version, posted_date
-
-void openFile()
+void openFile(int i)
 {
 
     File file;
@@ -23,19 +21,36 @@ void openFile()
 
     file.writeBin(&review);
 
-    file.testeImportacao(1, &review);
+    if (i == 1)
+    {
+        int n;
+        cout << "Digite 1 para a saída no console ou 2 para a saída em arquivo .txt:";
+        cin >> n;
+        file.testeImportacao(n, &review);
+    }
+    else if (i == 2)
+    {
+        int n;
+        cout << "Digite um numero para acessar diretamente o registro correspondente no arquivo binario: ";
+        cin >> n;
+        file.acessaRegistro(n);
+    }
 
-    int n;
-    cout << "Digite um numero para acessar diretamente o registro correspondente no arquivo binario: ";
-    cin >> n;
-    file.acessaRegistro(n);
     //file.readBinary(&teste);
+}
+
+void Menu()
+{
+    int i;
+    cout << "MENU:" << endl;
+    cout << "Digite 1 para entrar acessar o módulo de teste ou 2 para acessar um registro do arquivo:" << endl;
+    cin >> i;
+    openFile(i);
 }
 
 int main()
 {
-    cout << "MODULO DE TESTES:" << endl;
-    openFile();
+    Menu();
     cout << "Fim" << endl;
     return 0;
 }

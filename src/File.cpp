@@ -92,7 +92,7 @@ void File::writeBin(vector<Review> *reviewList)
 
     for (int i = 0; i < reviewList->size(); i++)
     {
-        cout << "write binary " << &reviewList->at(i) << endl;
+        //cout << "write binary " << &reviewList->at(i) << endl;
         outputFile.write(reinterpret_cast<char *>(&reviewList->at(i)), sizeof(Review));
     }
 
@@ -118,7 +118,6 @@ void File::readBinary(vector<Review> *reviewList)
         contador++;
     }
 
-    //cout << reviewList->size() << endl;
 
     for (int i = 0; i < reviewList->size(); i++)
     {
@@ -174,7 +173,7 @@ void File::testeImportacao(int n, vector<Review> *reviewList)
 {
     
 
-    if (n == 0) //saida em console
+    if (n == 1) //saida em console
     {
         vector<Review> randomReview;
         Review line;
@@ -187,11 +186,11 @@ void File::testeImportacao(int n, vector<Review> *reviewList)
         }
         printConsole(&randomReview);
     }
-    else if (n == 1) //saida em texto
+    else if (n == 2) //saida em texto
     {
         vector<Review> randomReview;
         Review line;
-        for (int i=0; i<5; i++) {
+        for (int i=0; i<100; i++) {
             int result = 1 + (rand() % reviewList->size()-1);
             cout << result << endl;
             line = reviewList->at(result);
