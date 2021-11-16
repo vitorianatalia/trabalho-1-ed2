@@ -61,7 +61,7 @@ void File::readFile(vector<Review> *reviewList, string filename)
         reviewList->push_back(review);
         contador++;
     }
-    cout << reviewList->size() << endl;
+    //cout << reviewList->size() << endl;
     return;
 }
 
@@ -112,22 +112,16 @@ void File::readBinary(vector<Review> *reviewList)
     Review review;
 
     int contador = 0;
-    while (!inputFile.eof())
+    while (inputFile.read(reinterpret_cast<char *>(&review), sizeof(Review)))
     {
-
-        inputFile.read(reinterpret_cast<char *>(&review), sizeof(Review));
-
-        cout << "read binary " << &review << endl;
-
         reviewList->push_back(review);
-
-        cout << endl;
         contador++;
     }
 
-    cout << reviewList->size() << endl; 
+    //cout << reviewList->size() << endl;
 
-    for(int i=0; i < reviewList->size(); i++ ){
+    for (int i = 0; i < reviewList->size(); i++)
+    {
         cout << "versao:" << reviewList->at(i).getAppVersion() << endl;
         cout << "data:" << reviewList->at(i).getPostedDate() << endl;
         cout << "id:" << reviewList->at(i).getReview_id() << endl;
@@ -135,9 +129,22 @@ void File::readBinary(vector<Review> *reviewList)
         cout << "likes:" << reviewList->at(i).getUpvotes() << endl;
         cout << endl;
     }
-
     inputFile.close();
 }
+
+void File::printConsole(vector<Review> *reviewList)
+{
+    for (int i = 0; i < reviewList->size(); i++)
+    {
+        cout << "versao:" << reviewList->at(i).getAppVersion() << endl;
+        cout << "data:" << reviewList->at(i).getPostedDate() << endl;
+        cout << "id:" << reviewList->at(i).getReview_id() << endl;
+        cout << "texto:" << reviewList->at(i).getReview_text() << endl;
+        cout << "likes:" << reviewList->at(i).getUpvotes() << endl;
+        cout << endl;
+    }
+}
+
 
 void File::acessaRegistro(int n)
 {
@@ -151,39 +158,47 @@ void File::acessaRegistro(int n)
 
     Review review;
 
-    int pos = (n-1)*sizeof(Review);
+    int pos = (n - 1) * sizeof(Review);
     inputFile.seekg(pos);
     inputFile.read(reinterpret_cast<char *>(&review), sizeof(Review));
 
     cout << "ID: " << review.getReview_id() << endl;
     cout << "Texto: " << review.getReview_text() << endl;
     cout << "Votos: " << review.getUpvotes() << endl;
-    cout << "Versao: " << review.getAppVersion() << endl; 
+    cout << "Versao: " << review.getAppVersion() << endl;
     cout << "Data: " << review.getPostedDate() << endl;
     cout << endl;
 }
 
-// void File::testeImportacao(int input)
-// {free
-//     cout << "testeImportacao" << endl;
-// }
+void File::testeImportacao(int n, vector<Review> *reviewList)
+{
+    
 
-// void menu() {
-//     while (1)
-//     {
-//         int input;
-//         cout << "Deseja exibir a saída em console ou salvar em arquivo texto?" << endl;
-//         cin >> input;
-//         switch (input)
-//         {
-//         case 10:
-//             this->testeImportacao(input);
-//             break;
-//         case 100:
-//             testeImportacao(input);
-//             break;
-//         default:
-//             cout << "Entrada inválida" << endl;
-//         }
-//     }
-// }
+    if (n == 0) //saida em console
+    {
+        vector<Review> randomReview;
+        Review line;
+        for (int i=0; i<10; i++) {
+            int result = 1 + (rand() % reviewList->size()-1);
+            cout << result << endl;
+            line = reviewList->at(result);
+            randomReview.push_back(line);
+            cout << "contador: " << i << endl << endl;
+        }
+        printConsole(&randomReview);
+    }
+    else if (n == 1) //saida em texto
+    {
+        vector<Review> randomReview;
+        Review line;
+        for (int i=0; i<5; i++) {
+            int result = 1 + (rand() % reviewList->size()-1);
+            cout << result << endl;
+            line = reviewList->at(result);
+            randomReview.push_back(line);
+            cout << "contador: " << i << endl << endl;
+        }
+        writeTxt(&randomReview);
+    }
+}
+

@@ -23,12 +23,13 @@ void openFile()
 
     file.writeBin(&review);
 
-    file.readBinary(&teste);
+    file.testeImportacao(1, &review);
 
     int n;
     cout << "Digite um numero para acessar diretamente o registro correspondente no arquivo binario: ";
     cin >> n;
     file.acessaRegistro(n);
+    //file.readBinary(&teste);
 }
 
 int main()
