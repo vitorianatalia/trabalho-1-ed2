@@ -28,7 +28,7 @@ void openFile(int i)
     else if (i == 2)
     {
         long int n;
-        cout << "Digite um numero para acessar diretamente o registro correspondente no arquivo binario: ";
+        cout << "Digite 1 numero para acessar diretamente o registro correspondente no arquivo binario: ";
         cin >> n;
         file.acessaRegistro(n);
     }

@@ -4,8 +4,12 @@
 #include <string>
 #include <iostream>
 #include <vector>
+#include <cstdlib> 
+
 
 using namespace std;
+
+
 
 void File::readFile(vector<Review> *reviewList, string filename)
 {
@@ -174,6 +178,8 @@ void File::testeImportacao()
 {
     ifstream inputFile("teste.bin", ios::in | ios::binary);
 
+    srand (time(0));
+    
     if (!inputFile.is_open())
     {
         cout << "Error: Could not open file" << endl;
