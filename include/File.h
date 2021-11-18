@@ -17,7 +17,6 @@ public:
     void acessaRegistro(long int n);
     void testeImportacao();
     void printConsole(vector<Review> *reviewList);
-    // void menu(int input);
 };
 
 #endif

@@ -9,16 +9,12 @@ using namespace std;
 
 void openFile(int i)
 {
-
     File file;
 
     vector<Review> review;
     vector<Review> teste;
 
     file.readFile(&review, "tiktok_app_reviews.csv");
-
-    //file.writeTxt(&review);
-
     file.writeBin(&review);
 
     if (i == 1)
@@ -32,22 +28,38 @@ void openFile(int i)
         cin >> n;
         file.acessaRegistro(n);
     }
-
-    //file.readBinary(&teste);
 }
 
-void Menu()
+void menu()
 {
     int i;
-    cout << "MENU:" << endl;
-    cout << "Digite 1 para acessar o modulo de teste ou 2 para acessar um registro do arquivo: ";
-    cin >> i;
-    openFile(i);
+
+    do
+    {
+        cout << "========================================= " << endl;
+        cout << "\t\tMENU:" << endl;
+        cout << "1 - Acessar modulo de testes" << endl;
+        cout << "2 - Acessar registro do arquivo" << endl;
+        cout << "0 - Sair" << endl;
+        cout << "========================================= " << endl;
+
+        cin >> i;
+
+        switch (i) {
+            case 0:
+                break;
+            case 1: case 2:
+                openFile(i);
+                break;
+            default:
+                cout << "Valor digitado invalido" << endl;
+        }
+    } while(i);
 }
 
 int main()
 {
-    Menu();
-    cout << "Fim" << endl;
+    menu();
+    cout << "Programa encerrado" << endl;
     return 0;
 }

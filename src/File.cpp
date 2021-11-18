@@ -5,17 +5,14 @@
 #include <iostream>
 #include <vector>
 #include <cstdlib> 
-
+#include <time.h>
 
 using namespace std;
-
-
 
 void File::readFile(vector<Review> *reviewList, string filename)
 {
     ifstream arq(filename.c_str(), ios::in);
     Review review;
-    int contador = 0;
 
     if (!arq.is_open())
     {
@@ -63,19 +60,16 @@ void File::readFile(vector<Review> *reviewList, string filename)
         line.clear();
 
         reviewList->push_back(review);
-        contador++;
     }
-    //cout << reviewList->size() << endl;
     return;
 }
 
 void File::writeTxt(vector<Review> *reviewList)
 {
-    ofstream outputFile("teste.txt", std::ofstream::out | std::ofstream::trunc);
+    ofstream outputFile("tiktok_app_reviews.txt", std::ofstream::out | std::ofstream::trunc);
 
     for (int i = 0; i < reviewList->size(); i++)
     {
-
         outputFile << "Linha - " << i+1 << endl;
         outputFile << "ID: " << reviewList->at(i).getReview_id() << endl;
         outputFile << "Texto: " << reviewList->at(i).getReview_text() << endl;
@@ -92,11 +86,10 @@ void File::writeTxt(vector<Review> *reviewList)
 
 void File::writeBin(vector<Review> *reviewList)
 {
-    ofstream outputFile("teste.bin", ios::out | ios::trunc | ios::binary);
+    ofstream outputFile("tiktok_app_reviews.bin", ios::out | ios::trunc | ios::binary);
 
     for (int i = 0; i < reviewList->size(); i++)
     {
-        //cout << "write binary " << &reviewList->at(i) << endl;
         outputFile.write(reinterpret_cast<char *>(&reviewList->at(i)), sizeof(Review));
     }
 
@@ -105,7 +98,7 @@ void File::writeBin(vector<Review> *reviewList)
 
 void File::readBinary(vector<Review> *reviewList)
 {
-    ifstream inputFile("teste.bin", ios::in | ios::binary);
+    ifstream inputFile("tiktok_app_reviews.bin", ios::in | ios::binary);
 
     if (!inputFile.is_open())
     {
@@ -115,13 +108,10 @@ void File::readBinary(vector<Review> *reviewList)
 
     Review review;
 
-    int contador = 0;
     while (inputFile.read(reinterpret_cast<char *>(&review), sizeof(Review)))
     {
         reviewList->push_back(review);
-        contador++;
     }
-
 
     for (int i = 0; i < reviewList->size(); i++)
     {
@@ -151,7 +141,7 @@ void File::printConsole(vector<Review> *reviewList)
 
 void File::acessaRegistro(long int n)
 {
-    ifstream inputFile("teste.bin", ios::in | ios::binary);
+    ifstream inputFile("tiktok_app_reviews.bin", ios::in | ios::binary);
 
     if (!inputFile.is_open())
     {
@@ -176,7 +166,7 @@ void File::acessaRegistro(long int n)
 
 void File::testeImportacao()
 {
-    ifstream inputFile("teste.bin", ios::in | ios::binary);
+    ifstream inputFile("tiktok_app_reviews.bin", ios::in | ios::binary);
 
     srand (time(0));
     
@@ -213,7 +203,6 @@ void File::testeImportacao()
         for (int i=0; i<100; i++) {
             long int result = 1 + (rand() % (tam-1));
             long int pos = (result - 1) * sizeof(Review);
-            cout << result << endl;
             inputFile.seekg(pos);
             inputFile.read(reinterpret_cast<char *>(&review2), sizeof(Review));
             randomReview.push_back(review2);
