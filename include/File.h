@@ -14,8 +14,8 @@ public:
     void writeTxt(vector<Review> *reviewList);
     void writeBin(vector<Review> *reviewList);
     void readBinary(vector<Review> *reviewList);
-    void acessaRegistro(int n);
-    void testeImportacao(int n, vector<Review> *reviewList);
+    void acessaRegistro(long int n);
+    void testeImportacao();
     void printConsole(vector<Review> *reviewList);
     // void menu(int input);
 };
