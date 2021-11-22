@@ -12,7 +12,6 @@ void openFile(int i)
     File file;
 
     vector<Review> review;
-    vector<Review> teste;
 
     file.readFile(&review, "tiktok_app_reviews.csv");
     file.writeBin(&review);

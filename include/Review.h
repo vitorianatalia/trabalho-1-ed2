@@ -13,7 +13,7 @@ private:
     string review_text;
     int upvotes;
     string app_version;
-    string posted_date; //should we treat the date?
+    string posted_date; 
 public:
     string getReview_id() { return review_id; }
     void setReview_id(string review_id) { this->review_id = review_id; }
