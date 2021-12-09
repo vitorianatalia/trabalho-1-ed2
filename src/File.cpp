@@ -319,7 +319,7 @@ void File::generateVector(long int n)
     countingsort(&v, n);
 }
 
-void countingsort(vector<Review> *reviews, long int n)
+void File::countingsort(vector<Review> *reviews, long int n)
 {
     cout << "Upvotes: " << reviews->at(0).getUpvotes() << endl;
     // long i;
