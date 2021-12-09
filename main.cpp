@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string>
-
+#include <algorithm>
 using namespace std;
 
 void quicksort(Review *reviews, int left, int right)
@@ -42,6 +42,46 @@ void quicksort(Review *reviews, int left, int right)
     }
 }
 
+void countingsort(long *reviews, const long n)
+{
+    long i;
+    long largest = reviews[0];
+    long *tmp = new long[n];
+
+    for(i = 1; i< n; i++)
+    {
+        if(largest < reviews[i])
+        largest  = reviews[i];
+    }
+
+    unsigned long *count = new unsigned long[largest+1];
+
+    for(i = 0; i <= largest; i++)
+    {
+        count[i] = 0;
+    }
+
+    for(i = 0; i < n; i++)
+    {
+        count[reviews[i]]++;
+    }
+
+    for(i = 1; i <= largest; i++)
+    {
+        count[i] = count[i-1] + count[i];
+    }
+
+    for(i = n-1; i >= 0; i++)
+    {
+        tmp[count[reviews[i]] - 1] = reviews[i];
+        count[reviews[i]]--;
+    }
+
+    for(i = 0; i <= n; i++)
+    {
+        reviews[i] = tmp[i];
+    }
+}
 void openFile(int i)
 {
     File file;
@@ -63,14 +103,22 @@ void openFile(int i)
         file.acessaRegistro(n);
     }
 
-    if (i == 3)
+    else if (i == 3)
     {
         quicksort(review.data(), 0, review.size() - 1);
 
         for (int i = 1; i < review.size() - 1; i++)
         {
-            cout << review[i].getReview_id() << " - " << review[i].getUpvotes() << endl;
+            cout << review[i].getUpvotes() << endl;
         }
+    }
+
+    else if ( i == 4)
+    {
+        int n;
+        cout << "Insira um número de registros:" << endl;
+        cin >> n;
+        countingsort(review.data(),n);
     }
 }
 
@@ -97,6 +145,7 @@ void menu()
         case 1:
         case 2:
         case 3:
+        case 4:
             openFile(i);
             break;
         default:

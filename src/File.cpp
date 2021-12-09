@@ -6,6 +6,7 @@
 #include <vector>
 #include <cstdlib> 
 #include <time.h>
+#include <algorithm>
 
 using namespace std;
 
