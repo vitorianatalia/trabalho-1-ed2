@@ -42,46 +42,7 @@ void quicksort(Review *reviews, int left, int right)
     }
 }
 
-void countingsort(long *reviews, const long n)
-{
-    long i;
-    long largest = reviews[0];
-    long *tmp = new long[n];
 
-    for(i = 1; i< n; i++)
-    {
-        if(largest < reviews[i])
-        largest  = reviews[i];
-    }
-
-    unsigned long *count = new unsigned long[largest+1];
-
-    for(i = 0; i <= largest; i++)
-    {
-        count[i] = 0;
-    }
-
-    for(i = 0; i < n; i++)
-    {
-        count[reviews[i]]++;
-    }
-
-    for(i = 1; i <= largest; i++)
-    {
-        count[i] = count[i-1] + count[i];
-    }
-
-    for(i = n-1; i >= 0; i++)
-    {
-        tmp[count[reviews[i]] - 1] = reviews[i];
-        count[reviews[i]]--;
-    }
-
-    for(i = 0; i <= n; i++)
-    {
-        reviews[i] = tmp[i];
-    }
-}
 void openFile(int i)
 {
     File file;
@@ -113,14 +74,6 @@ void openFile(int i)
         }
     }
 
-    else if ( i == 5)
-    {
-        int n;
-        cout << "Insira um número de registros:" << endl;
-        cin >> n;
-        countingsort(review.data(),n);
-    }
-    
     else if (i == 4)
     {
         long int n;
@@ -128,6 +81,16 @@ void openFile(int i)
         cin >> n;
         file.geraVetor(n);
     }
+
+    else if (i == 5)
+    {
+        long int n;
+        cout << "Insira um número de registros:" << endl;
+        cin >> n;
+        file.generateVector(n);
+    }
+    
+   
 }
 
 void menu()
@@ -142,6 +105,7 @@ void menu()
         cout << "2 - Acessar registro do arquivo" << endl;
         cout << "3 - Quicksort" << endl;
         cout << "4 - Heapsort" << endl;
+        cout << "5 - Gerar N registros" << endl;
         cout << "0 - Sair" << endl;
         cout << "========================================= " << endl;
 
@@ -149,16 +113,17 @@ void menu()
 
         switch (i)
         {
-        case 0:
-            break;
-        case 1:
-        case 2:
-        case 3:
-        case 4:
-            openFile(i);
-            break;
-        default:
-            cout << "Valor digitado invalido" << endl;
+            case 0:
+                break;
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+                openFile(i);
+                break;
+            default:
+                cout << "Valor digitado invalido" << endl;
         }
     } while (i);
 }

@@ -1,7 +1,7 @@
 #include "File.h"
 #include "Review.h"
 #include <fstream>
-#include <string>
+
 #include <iostream>
 #include <vector>
 #include <cstdlib> 
@@ -284,4 +284,79 @@ void File::heapSort(vector<int> *heapReview, int n)
     {
         cout << heapReview3[i] << endl;
     }
+}
+
+void File::generateVector(long int n)
+{
+    ifstream inputFile("tiktok_app_reviews.bin", ios::in | ios::binary);
+
+    srand (time(0));
+    
+    if (!inputFile.is_open())
+    {
+        cout << "Error: Could not open file" << endl;
+        exit(1);
+    }
+    inputFile.seekg(0, std::ios::end);
+    long int tam = (inputFile.tellg()/sizeof(Review));
+
+    vector<Review> v;
+    
+    Review review2;
+
+    for (int i=0; i<n; i++) {
+        long int result = 1 + (rand() % (tam-1));
+        long int pos = (result - 1) * sizeof(Review);
+        inputFile.seekg(pos);
+        inputFile.read(reinterpret_cast<char *>(&review2), sizeof(Review));
+        v.push_back(review2);
+    }
+
+    int a = v.size();
+    int i = 0;
+
+    
+    countingsort(&v, n);
+}
+
+void countingsort(vector<Review> *reviews, const long n)
+{
+    cout << "Upvotes: " << reviews[0].at(0).getUpvotes() << endl;
+    // long i;
+    // long largest = reviews[0].getUpvotes();
+    // long *tmp = new long[n];
+
+    // for(i = 1; i< n; i++)
+    // {
+    //     if(largest < reviews[i])
+    //     largest  = reviews[i];
+    // }
+
+    // unsigned long *count = new unsigned long[largest+1];
+
+    // for(i = 0; i <= largest; i++)
+    // {
+    //     count[i] = 0;
+    // }
+
+    // for(i = 0; i < n; i++)
+    // {
+    //     count[reviews[i]]++;
+    // }
+
+    // for(i = 1; i <= largest; i++)
+    // {
+    //     count[i] = count[i-1] + count[i];
+    // }
+
+    // for(i = n-1; i >= 0; i++)
+    // {
+    //     tmp[count[reviews[i]] - 1] = reviews[i];
+    //     count[reviews[i]]--;
+    // }
+
+    // for(i = 0; i <= n; i++)
+    // {
+    //     reviews[i] = tmp[i];
+    // }
 }
