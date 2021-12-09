@@ -113,12 +113,20 @@ void openFile(int i)
         }
     }
 
-    else if ( i == 4)
+    else if ( i == 5)
     {
         int n;
         cout << "Insira um número de registros:" << endl;
         cin >> n;
         countingsort(review.data(),n);
+    }
+    
+    else if (i == 4)
+    {
+        long int n;
+        cout << "Digite a quantia de números aleatórios: ";
+        cin >> n;
+        file.geraVetor(n);
     }
 }
 
@@ -133,6 +141,7 @@ void menu()
         cout << "1 - Acessar modulo de testes" << endl;
         cout << "2 - Acessar registro do arquivo" << endl;
         cout << "3 - Quicksort" << endl;
+        cout << "4 - Heapsort" << endl;
         cout << "0 - Sair" << endl;
         cout << "========================================= " << endl;
 

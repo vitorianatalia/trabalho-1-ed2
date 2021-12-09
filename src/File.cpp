@@ -211,3 +211,77 @@ void File::testeImportacao()
         writeTxt(&randomReview);
     }
 }
+
+void File::geraVetor(long int n)
+{
+    ifstream inputFile("tiktok_app_reviews.bin", ios::in | ios::binary);
+
+    srand (time(0));
+    
+    if (!inputFile.is_open())
+    {
+        cout << "Error: Could not open file" << endl;
+        exit(1);
+    }
+    inputFile.seekg(0, std::ios::end);
+    long int tam = (inputFile.tellg()/sizeof(Review));
+
+    vector<int> heapReview;
+    
+    Review review2;
+
+    for (int i=0; i<n; i++) {
+        long int result = 1 + (rand() % (tam-1));
+        long int pos = (result - 1) * sizeof(Review);
+        inputFile.seekg(pos);
+        inputFile.read(reinterpret_cast<char *>(&review2), sizeof(Review));
+        heapReview.push_back(review2.getUpvotes());
+    }
+
+    int a = heapReview.size();
+    int i = 0;
+
+    maxHeapify(&heapReview, a, i);
+}
+
+void File::maxHeapify(vector<int> *heapReview, int n, int i)
+{
+    int largest = i;
+    int l = 2 * i + 1;
+    int r = 2 * i + 2;
+
+    vector<int> heapReview2 = *heapReview;
+ 
+    if(l <= n && heapReview2[l] > heapReview2[largest])
+        largest = l;
+ 
+    if(r <= n && heapReview2[r] > heapReview2[largest])
+        largest = r;
+ 
+    if(largest != i) {
+        swap(heapReview2[i], heapReview2[largest]);
+ 
+        maxHeapify(&heapReview2, n, largest);
+    }
+
+    heapSort(&heapReview2, n);
+}
+
+void File::heapSort(vector<int> *heapReview, int n)
+{
+    vector<int> heapReview3 = *heapReview;
+
+    for(int i = n / 2 - 1; i >= 0; i--)
+        maxHeapify(&heapReview3, n, i);
+ 
+    for(int i = n - 1; i > 0; i--) {
+        swap(heapReview3[0], heapReview3[i]);
+ 
+        maxHeapify(&heapReview3, i, 0);
+    }
+
+    for (int i = 0; i < heapReview3.size(); i++)
+    {
+        cout << heapReview3[i] << endl;
+    }
+}
