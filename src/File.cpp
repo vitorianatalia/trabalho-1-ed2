@@ -1,7 +1,7 @@
 #include "File.h"
 #include "Review.h"
 #include <fstream>
-
+#include <string>
 #include <iostream>
 #include <vector>
 #include <cstdlib> 
@@ -315,48 +315,49 @@ void File::generateVector(long int n)
     int a = v.size();
     int i = 0;
 
-    
-    countingsort(&v, n);
+  //  printConsole(&v);
+    countingsort(&v);
 }
 
-void File::countingsort(vector<Review> *reviews, long int n)
+void File::countingsort(vector<Review> *reviews)
 {
-    cout << "Upvotes: " << reviews->at(0).getUpvotes() << endl;
-    // long i;
-    // long largest = reviews[0].getUpvotes();
-    // long *tmp = new long[n];
+    
+    long n = reviews->size();
+    long largest = reviews->at(0).getUpvotes();
 
-    // for(i = 1; i< n; i++)
-    // {
-    //     if(largest < reviews[i])
-    //     largest  = reviews[i];
-    // }
+    for(int i = 1; i< n; i++)
+    {
+        if(largest < reviews->at(i).getUpvotes())
+        largest  = reviews->at(i).getUpvotes();
+    }
+    cout << "Upvotes: " << largest << endl;
 
-    // unsigned long *count = new unsigned long[largest+1];
+    int count[n];
+    vector<Review> ordenados;
 
-    // for(i = 0; i <= largest; i++)
-    // {
-    //     count[i] = 0;
-    // }
+    int i;
 
-    // for(i = 0; i < n; i++)
-    // {
-    //     count[reviews[i]]++;
-    // }
+    for (i = 0; i <= largest; i++) {
+        count[i] = 0;
+    }
 
-    // for(i = 1; i <= largest; i++)
-    // {
-    //     count[i] = count[i-1] + count[i];
-    // }
+    for ( i = 0; i < n; i++) {
+        int j = reviews->at(i).getUpvotes();
+        count[j]++;
+    }
 
-    // for(i = n-1; i >= 0; i++)
-    // {
-    //     tmp[count[reviews[i]] - 1] = reviews[i];
-    //     count[reviews[i]]--;
-    // }
-
-    // for(i = 0; i <= n; i++)
-    // {
-    //     reviews[i] = tmp[i];
-    // }
+    for ( i = 1; i <= largest; i++) {
+        count[i] += count[i - 1];
+    }
+//Esse for não está funcionando ainda
+    for (i = n - 1; i >= 0; i--) {
+        int j = count[reviews->at(i).getUpvotes()];
+        auto itPos = ordenados.begin() + j;
+        Review review  = reviews->at(i);
+        ordenados.insert(itPos, review);
+        
+        count[reviews->at(i).getUpvotes()] = count[reviews->at(i).getUpvotes()] - 1;
+    } 
+    printConsole(&ordenados);
+    
 }
