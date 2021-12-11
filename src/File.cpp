@@ -380,7 +380,7 @@ void File::quicksort(Review *reviews, int left, int right, Analytics *analytics)
 void File::generateVector(long int n, int m, int algorithm)
 {
     ifstream inputFile("tiktok_app_reviews.bin", ios::in | ios::binary);
-    ofstream outputFile("results.txt", std::ofstream::out | std::ofstream::trunc);
+    ofstream outputFile("results.txt", std::ofstream::out | std::ofstream::app);
 
     srand(time(0));
 
@@ -422,6 +422,7 @@ void File::generateVector(long int n, int m, int algorithm)
             countingsort(&v);
             break;
         case 3:
+            outputFile << endl;
             outputFile << "QuickSort"
                        << "\n"
                        << endl;
@@ -438,7 +439,7 @@ void File::generateVector(long int n, int m, int algorithm)
 
         chrono::duration<double, std::milli> ms_double = stop - start;
 
-        outputFile << (m - originalM + 1) * -1 << "Execucao" << endl;
+        outputFile << originalM - m + 1 << "Execucao" << endl;
         outputFile << "Comparacoes: " << analytics.getComparisons() << endl;
         outputFile << "Trocas: " << analytics.getSwaps() << endl;
         outputFile << "Tempo de execucao: " << ms_double.count() << "ms" << endl;
@@ -448,6 +449,7 @@ void File::generateVector(long int n, int m, int algorithm)
         avgTime += ms_double.count();
 
         m--;
+        analytics.clear();
     }
 
     outputFile << endl;
