@@ -1,12 +1,13 @@
 #include "File.h"
 #include "Review.h"
+#include "Analytics.h"
 #include <fstream>
 #include <string>
 #include <iostream>
 #include <vector>
-#include <cstdlib> 
 #include <time.h>
 #include <algorithm>
+#include <chrono>
 
 using namespace std;
 
@@ -71,7 +72,7 @@ void File::writeTxt(vector<Review> *reviewList)
 
     for (int i = 0; i < reviewList->size(); i++)
     {
-        outputFile << "Linha - " << i+1 << endl;
+        outputFile << "Linha - " << i + 1 << endl;
         outputFile << "ID: " << reviewList->at(i).getReview_id() << endl;
         outputFile << "Texto: " << reviewList->at(i).getReview_text() << endl;
         outputFile << "Votos: " << reviewList->at(i).getUpvotes() << endl;
@@ -139,7 +140,6 @@ void File::printConsole(vector<Review> *reviewList)
     }
 }
 
-
 void File::acessaRegistro(long int n)
 {
     ifstream inputFile("tiktok_app_reviews.bin", ios::in | ios::binary);
@@ -169,26 +169,27 @@ void File::testeImportacao()
 {
     ifstream inputFile("tiktok_app_reviews.bin", ios::in | ios::binary);
 
-    srand (time(0));
-    
+    srand(time(0));
+
     if (!inputFile.is_open())
     {
         cout << "Error: Could not open file" << endl;
         exit(1);
     }
     inputFile.seekg(0, std::ios::end);
-    long int tam = (inputFile.tellg()/sizeof(Review));
+    long int tam = (inputFile.tellg() / sizeof(Review));
 
     int n;
     cout << "Digite 10 para a saida no console ou 100 para a saida em arquivo .txt: ";
     cin >> n;
-    
+
     if (n == 10) //saida em console
     {
         vector<Review> randomReview;
         Review review2;
-        for (int i=0; i<10; i++) {
-            long int result = 1 + (rand() % (tam-1));
+        for (int i = 0; i < 10; i++)
+        {
+            long int result = 1 + (rand() % (tam - 1));
             long int pos = (result - 1) * sizeof(Review);
             cout << result << endl;
             inputFile.seekg(pos);
@@ -201,8 +202,9 @@ void File::testeImportacao()
     {
         vector<Review> randomReview;
         Review review2;
-        for (int i=0; i<100; i++) {
-            long int result = 1 + (rand() % (tam-1));
+        for (int i = 0; i < 100; i++)
+        {
+            long int result = 1 + (rand() % (tam - 1));
             long int pos = (result - 1) * sizeof(Review);
             inputFile.seekg(pos);
             inputFile.read(reinterpret_cast<char *>(&review2), sizeof(Review));
@@ -216,22 +218,23 @@ void File::geraVetor(long int n)
 {
     ifstream inputFile("tiktok_app_reviews.bin", ios::in | ios::binary);
 
-    srand (time(0));
-    
+    srand(time(0));
+
     if (!inputFile.is_open())
     {
         cout << "Error: Could not open file" << endl;
         exit(1);
     }
     inputFile.seekg(0, std::ios::end);
-    long int tam = (inputFile.tellg()/sizeof(Review));
+    long int tam = (inputFile.tellg() / sizeof(Review));
 
     vector<int> heapReview;
-    
+
     Review review2;
 
-    for (int i=0; i<n; i++) {
-        long int result = 1 + (rand() % (tam-1));
+    for (int i = 0; i < n; i++)
+    {
+        long int result = 1 + (rand() % (tam - 1));
         long int pos = (result - 1) * sizeof(Review);
         inputFile.seekg(pos);
         inputFile.read(reinterpret_cast<char *>(&review2), sizeof(Review));
@@ -251,16 +254,17 @@ void File::maxHeapify(vector<int> *heapReview, int n, int i)
     int r = 2 * i + 2;
 
     vector<int> heapReview2 = *heapReview;
- 
-    if(l <= n && heapReview2[l] > heapReview2[largest])
+
+    if (l <= n && heapReview2[l] > heapReview2[largest])
         largest = l;
- 
-    if(r <= n && heapReview2[r] > heapReview2[largest])
+
+    if (r <= n && heapReview2[r] > heapReview2[largest])
         largest = r;
- 
-    if(largest != i) {
+
+    if (largest != i)
+    {
         swap(heapReview2[i], heapReview2[largest]);
- 
+
         maxHeapify(&heapReview2, n, largest);
     }
 
@@ -271,12 +275,13 @@ void File::heapSort(vector<int> *heapReview, int n)
 {
     vector<int> heapReview3 = *heapReview;
 
-    for(int i = n / 2 - 1; i >= 0; i--)
+    for (int i = n / 2 - 1; i >= 0; i--)
         maxHeapify(&heapReview3, n, i);
- 
-    for(int i = n - 1; i > 0; i--) {
+
+    for (int i = n - 1; i > 0; i--)
+    {
         swap(heapReview3[0], heapReview3[i]);
- 
+
         maxHeapify(&heapReview3, i, 0);
     }
 
@@ -286,49 +291,16 @@ void File::heapSort(vector<int> *heapReview, int n)
     }
 }
 
-void File::generateVector(long int n)
-{
-    ifstream inputFile("tiktok_app_reviews.bin", ios::in | ios::binary);
-
-    srand (time(0));
-    
-    if (!inputFile.is_open())
-    {
-        cout << "Error: Could not open file" << endl;
-        exit(1);
-    }
-    inputFile.seekg(0, std::ios::end);
-    long int tam = (inputFile.tellg()/sizeof(Review));
-
-    vector<Review> v;
-    
-    Review review2;
-
-    for (int i=0; i<n; i++) {
-        long int result = 1 + (rand() % (tam-1));
-        long int pos = (result - 1) * sizeof(Review);
-        inputFile.seekg(pos);
-        inputFile.read(reinterpret_cast<char *>(&review2), sizeof(Review));
-        v.push_back(review2);
-    }
-
-    int a = v.size();
-    int i = 0;
-
-  //  printConsole(&v);
-    countingsort(&v);
-}
-
 void File::countingsort(vector<Review> *reviews)
 {
-    
+
     long n = reviews->size();
     long largest = reviews->at(0).getUpvotes();
 
-    for(int i = 1; i< n; i++)
+    for (int i = 1; i < n; i++)
     {
-        if(largest < reviews->at(i).getUpvotes())
-        largest  = reviews->at(i).getUpvotes();
+        if (largest < reviews->at(i).getUpvotes())
+            largest = reviews->at(i).getUpvotes();
     }
     cout << "Upvotes: " << largest << endl;
 
@@ -337,27 +309,151 @@ void File::countingsort(vector<Review> *reviews)
 
     int i;
 
-    for (i = 0; i <= largest; i++) {
+    for (i = 0; i <= largest; i++)
+    {
         count[i] = 0;
     }
 
-    for ( i = 0; i < n; i++) {
+    for (i = 0; i < n; i++)
+    {
         int j = reviews->at(i).getUpvotes();
         count[j]++;
     }
 
-    for ( i = 1; i <= largest; i++) {
+    for (i = 1; i <= largest; i++)
+    {
         count[i] += count[i - 1];
     }
-//Esse for não está funcionando ainda
-    for (i = n - 1; i >= 0; i--) {
+    //Esse for não está funcionando ainda
+    for (i = n - 1; i >= 0; i--)
+    {
         int j = count[reviews->at(i).getUpvotes()];
         auto itPos = ordenados.begin() + j;
-        Review review  = reviews->at(i);
+        Review review = reviews->at(i);
         ordenados.insert(itPos, review);
-        
+
         count[reviews->at(i).getUpvotes()] = count[reviews->at(i).getUpvotes()] - 1;
-    } 
+    }
     printConsole(&ordenados);
-    
+}
+
+void File::quicksort(Review *reviews, int left, int right, Analytics *analytics)
+{
+    int i = left;
+    int j = right;
+    Review pivot = reviews[(left + right) / 2];
+
+    while (i <= j)
+    {
+        analytics->addComparisons();
+        while (reviews[i].getUpvotes() < pivot.getUpvotes())
+        {
+            i++;
+        }
+
+        analytics->addComparisons();
+        while (reviews[j].getUpvotes() > pivot.getUpvotes())
+        {
+            j--;
+        }
+
+        if (i <= j)
+        {
+            Review temp = reviews[i];
+            reviews[i] = reviews[j];
+            reviews[j] = temp;
+            i++;
+            j--;
+            analytics->addSwaps();
+        }
+    }
+    if (left < j)
+    {
+        quicksort(reviews, left, j, analytics);
+    }
+    if (i < right)
+    {
+        quicksort(reviews, i, right, analytics);
+    }
+}
+
+void File::generateVector(long int n, int m, int algorithm)
+{
+    ifstream inputFile("tiktok_app_reviews.bin", ios::in | ios::binary);
+    ofstream outputFile("results.txt", std::ofstream::out | std::ofstream::trunc);
+
+    srand(time(0));
+
+    if (!inputFile.is_open())
+    {
+        cout << "Error: Could not open file" << endl;
+        exit(1);
+    }
+
+    Analytics analytics;
+    inputFile.seekg(0, std::ios::end);
+    long int tam = (inputFile.tellg() / sizeof(Review));
+    vector<Review> v;
+    Review review2;
+
+    for (int i = 0; i < n; i++)
+    {
+        long int result = 1 + (rand() % (tam - 1));
+        long int pos = result * sizeof(Review);
+        inputFile.seekg(pos);
+        inputFile.read(reinterpret_cast<char *>(&review2), sizeof(Review));
+        v.push_back(review2);
+    }
+
+    int avgComparisons = 0;
+    int avgSwaps = 0;
+    double avgTime = 0;
+    int originalM = m;
+
+    while (m > 0)
+    {
+        auto start = chrono::high_resolution_clock::now();
+        switch (algorithm)
+        {
+        case 1:
+            geraVetor(n);
+            break;
+        case 2:
+            countingsort(&v);
+            break;
+        case 3:
+            outputFile << "QuickSort"
+                       << "\n"
+                       << endl;
+            quicksort(v.data(), 0, v.size() - 1, &analytics);
+
+            break;
+
+        default:
+            cout << "Nenhum algoritmo selecionado" << endl;
+            break;
+        }
+
+        auto stop = chrono::high_resolution_clock::now();
+
+        chrono::duration<double, std::milli> ms_double = stop - start;
+
+        outputFile << (m - originalM + 1) * -1 << "Execucao" << endl;
+        outputFile << "Comparacoes: " << analytics.getComparisons() << endl;
+        outputFile << "Trocas: " << analytics.getSwaps() << endl;
+        outputFile << "Tempo de execucao: " << ms_double.count() << "ms" << endl;
+
+        avgComparisons += analytics.getComparisons();
+        avgSwaps += analytics.getSwaps();
+        avgTime += ms_double.count();
+
+        m--;
+    }
+
+    outputFile << endl;
+    outputFile << "Media de comparacoes: " << avgComparisons / originalM << endl;
+    outputFile << "Media de trocas: " << avgSwaps / originalM << endl;
+    outputFile << "Media de tempo de execucao: " << avgTime / originalM << "ms" << endl;
+
+    outputFile.close();
 }

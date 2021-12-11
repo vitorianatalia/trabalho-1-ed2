@@ -13,8 +13,14 @@ private:
     string review_text;
     int upvotes;
     string app_version;
-    string posted_date; 
+    string posted_date;
+
 public:
+    Review() {}
+
+    // create a Review destructor
+    ~Review() {}
+
     string getReview_id() { return review_id; }
     void setReview_id(string review_id) { this->review_id = review_id; }
     string getReview_text() { return review_text; }

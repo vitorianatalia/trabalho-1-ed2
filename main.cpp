@@ -7,42 +7,6 @@
 #include <algorithm>
 using namespace std;
 
-void quicksort(Review *reviews, int left, int right)
-{
-    int i = left;
-    int j = right;
-    Review pivot = reviews[(left + right) / 2];
-
-    while (i <= j)
-    {
-        while (reviews[i].getUpvotes() < pivot.getUpvotes())
-        {
-            i++;
-        }
-        while (reviews[j].getUpvotes() > pivot.getUpvotes())
-        {
-            j--;
-        }
-        if (i <= j)
-        {
-            Review temp = reviews[i];
-            reviews[i] = reviews[j];
-            reviews[j] = temp;
-            i++;
-            j--;
-        }
-    }
-    if (left < j)
-    {
-        quicksort(reviews, left, j);
-    }
-    if (i < right)
-    {
-        quicksort(reviews, i, right);
-    }
-}
-
-
 void openFile(int i)
 {
     File file;
@@ -52,45 +16,59 @@ void openFile(int i)
     file.readFile(&review, "tiktok_app_reviews.csv");
     file.writeBin(&review);
 
-    if (i == 1)
+    switch (i)
     {
+    case 1:
         file.testeImportacao();
-    }
-    else if (i == 2)
-    {
-        long int n;
+        break;
+    case 2:
+        long int accessNumber;
         cout << "Digite 1 numero para acessar diretamente o registro correspondente no arquivo binario: ";
+        cin >> accessNumber;
+        file.acessaRegistro(accessNumber);
+        break;
+    case 3:
+        int m;
+        long int n;
+        int algorithm;
+
+        cout << endl;
+        cout << "Algoritmo de ordenação: " << endl;
+        cout << "1 - HeapSort" << endl;
+        cout << "2 - CountingSort" << endl;
+        cout << "3 - QuickSort" << endl;
+        cin >> algorithm;
+
+        cout << endl;
+        cout << "Quantas vezes deseja executar o algoritmo (minimo 3): " << endl;
+        cin >> m;
+
+        cout << endl;
+        cout << "Quantos valores deseja ordenar: " << endl;
+        cout << "1 - 10.000" << endl;
+        cout << "2 - 50.000" << endl;
+        cout << "3 - 100.000" << endl;
+        cout << "4 - 500.000" << endl;
+        cout << "5 - 1.000.000" << endl;
         cin >> n;
-        file.acessaRegistro(n);
-    }
 
-    else if (i == 3)
-    {
-        quicksort(review.data(), 0, review.size() - 1);
-
-        for (int i = 1; i < review.size() - 1; i++)
+        if (n <= 0 || n > 5 || m < 3)
         {
-            cout << review[i].getUpvotes() << endl;
+            cout << "Valores invalidos" << endl;
+            return;
         }
-    }
 
-    else if (i == 4)
-    {
-        long int n;
-        cout << "Digite a quantia de números aleatórios: ";
-        cin >> n;
-        file.geraVetor(n);
-    }
+        n = n == 1 ? 10000 : n == 2 ? 50000
+                         : n == 3   ? 100000
+                         : n == 4   ? 500000
+                                    : 1000000;
 
-    else if (i == 5)
-    {
-        long int n;
-        cout << "Insira um número de registros:" << endl;
-        cin >> n;
-        file.generateVector(n);
+        file.generateVector(n, m, algorithm);
+        break;
+
+    default:
+        break;
     }
-    
-   
 }
 
 void menu()
@@ -103,9 +81,7 @@ void menu()
         cout << "\t\tMENU:" << endl;
         cout << "1 - Acessar modulo de testes" << endl;
         cout << "2 - Acessar registro do arquivo" << endl;
-        cout << "3 - Quicksort" << endl;
-        cout << "4 - Heapsort" << endl;
-        cout << "5 - Gerar N registros" << endl;
+        cout << "3 - Algoritmos de Ordenacao" << endl;
         cout << "0 - Sair" << endl;
         cout << "========================================= " << endl;
 
@@ -113,17 +89,15 @@ void menu()
 
         switch (i)
         {
-            case 0:
-                break;
-            case 1:
-            case 2:
-            case 3:
-            case 4:
-            case 5:
-                openFile(i);
-                break;
-            default:
-                cout << "Valor digitado invalido" << endl;
+        case 0:
+            break;
+        case 1:
+        case 2:
+        case 3:
+            openFile(i);
+            break;
+        default:
+            cout << "Valor digitado invalido" << endl;
         }
     } while (i);
 }
