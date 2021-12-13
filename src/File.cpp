@@ -129,6 +129,8 @@ void File::readBinary(vector<Review> *reviewList)
 
 void File::printConsole(vector<Review> *reviewList)
 {
+
+    cout << "print console" << endl;
     for (int i = 0; i < reviewList->size(); i++)
     {
         cout << "ID:" << reviewList->at(i).getReview_id() << endl;
@@ -183,7 +185,7 @@ void File::testeImportacao()
     cout << "Digite 10 para a saida no console ou 100 para a saida em arquivo .txt: ";
     cin >> n;
 
-    if (n == 10) //saida em console
+    if (n == 10) // saida em console
     {
         vector<Review> randomReview;
         Review review2;
@@ -198,7 +200,7 @@ void File::testeImportacao()
         }
         printConsole(&randomReview);
     }
-    else if (n == 100) //saida em texto
+    else if (n == 100) // saida em texto
     {
         vector<Review> randomReview;
         Review review2;
@@ -293,10 +295,8 @@ void File::heapSort(vector<int> *heapReview, int n)
 
 void File::countingsort(vector<Review> *reviews)
 {
-
-    long n = reviews->size();
     long largest = reviews->at(0).getUpvotes();
-
+    int n = reviews->size();
     for (int i = 1; i < n; i++)
     {
         if (largest < reviews->at(i).getUpvotes())
@@ -304,37 +304,46 @@ void File::countingsort(vector<Review> *reviews)
     }
     cout << "Upvotes: " << largest << endl;
 
-    int count[n];
-    vector<Review> ordenados;
+    int count[largest + 1];
+    vector<Review> ordenados[n];
 
     int i;
-
+    // inicializa com 0
     for (i = 0; i <= largest; i++)
     {
         count[i] = 0;
     }
 
+    cout << "For 1" << endl;
     for (i = 0; i < n; i++)
     {
-        int j = reviews->at(i).getUpvotes();
-        count[j]++;
+        count[reviews->at(i).getUpvotes()]++;
     }
-
+    
+    cout << "For 2" << endl;
     for (i = 1; i <= largest; i++)
     {
         count[i] += count[i - 1];
     }
-    //Esse for não está funcionando ainda
-    for (i = n - 1; i >= 0; i--)
+    // for(i = 0; i <= largest; i++)
+    //     cout << count[i] << " ";
+    // cout << endl;
+    cout << "For 3" << endl;
+    for (i = 0; i < n-1; i--)
     {
-        int j = count[reviews->at(i).getUpvotes()];
-        auto itPos = ordenados.begin() + j;
-        Review review = reviews->at(i);
-        ordenados.insert(itPos, review);
-
-        count[reviews->at(i).getUpvotes()] = count[reviews->at(i).getUpvotes()] - 1;
+        cout << "entrou" << endl;
+        ordenados->insert(ordenados->begin() + count[reviews->at(i).getUpvotes()] - 1, reviews->at(i));
+        cout << "inseriu no ordenados" << endl;
+        count[reviews->at(i).getUpvotes()]--;
     }
-    printConsole(&ordenados);
+    cout << "For 4" << endl;
+    for (i = 0; i < n; i++)
+    {
+        reviews->insert(reviews->begin(), ordenados->at(i));
+    }
+    cout << "For 5" << endl;
+    cout << endl;
+    printConsole(ordenados);
 }
 
 void File::quicksort(Review *reviews, int left, int right, Analytics *analytics)
