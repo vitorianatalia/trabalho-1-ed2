@@ -26,7 +26,7 @@ public:
     void maxHeapify(vector<int> *heapReview, int n, int i);
     void heapSort(vector<int> *heapReview, int n);
     void generateVector(long int n, int m, int algorithm);
-    void countingsort(vector<Review> *reviews);
+    void countingsort(vector<Review> *reviews, Analytics *analytics);
     void quicksort(Review *reviews, int left, int right, Analytics *analytics);
 };
 

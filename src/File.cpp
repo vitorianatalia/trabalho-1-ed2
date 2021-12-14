@@ -130,7 +130,6 @@ void File::readBinary(vector<Review> *reviewList)
 void File::printConsole(vector<Review> *reviewList)
 {
 
-    cout << "print console" << endl;
     for (int i = 0; i < reviewList->size(); i++)
     {
         cout << "ID:" << reviewList->at(i).getReview_id() << endl;
@@ -293,57 +292,55 @@ void File::heapSort(vector<int> *heapReview, int n)
     }
 }
 
-void File::countingsort(vector<Review> *reviews)
+void File::countingsort(vector<Review> *reviews, Analytics *analytics)
 {
     long largest = reviews->at(0).getUpvotes();
-    int n = reviews->size();
+    long int n = reviews->size();
+    cout << "tamanho: " << n << endl;
     for (int i = 1; i < n; i++)
     {
-        if (largest < reviews->at(i).getUpvotes())
+        if (largest < reviews->at(i).getUpvotes()) {
             largest = reviews->at(i).getUpvotes();
+            analytics->addComparisons();
+        }
     }
-    cout << "Upvotes: " << largest << endl;
 
-    int count[largest + 1];
-    vector<Review> ordenados[n];
+    int tam = largest + 1;
+    int count[tam];
+    Review ordenados[n];
 
     int i;
-    // inicializa com 0
+    cout << "For 1" << endl;
     for (i = 0; i <= largest; i++)
     {
         count[i] = 0;
     }
-
-    cout << "For 1" << endl;
+    cout << "For 2" << endl;
     for (i = 0; i < n; i++)
     {
         count[reviews->at(i).getUpvotes()]++;
     }
-    
-    cout << "For 2" << endl;
+    cout << "For 3" << endl;
     for (i = 1; i <= largest; i++)
     {
         count[i] += count[i - 1];
     }
-    // for(i = 0; i <= largest; i++)
-    //     cout << count[i] << " ";
-    // cout << endl;
-    cout << "For 3" << endl;
-    for (i = 0; i < n-1; i--)
-    {
-        cout << "entrou" << endl;
-        ordenados->insert(ordenados->begin() + count[reviews->at(i).getUpvotes()] - 1, reviews->at(i));
-        cout << "inseriu no ordenados" << endl;
-        count[reviews->at(i).getUpvotes()]--;
-    }
     cout << "For 4" << endl;
     for (i = 0; i < n; i++)
     {
-        reviews->insert(reviews->begin(), ordenados->at(i));
+        analytics->addSwaps();
+        ordenados[count[reviews->at(i).getUpvotes()] - 1] = reviews->at(i);
+        count[reviews->at(i).getUpvotes()]--;
     }
     cout << "For 5" << endl;
-    cout << endl;
-    printConsole(ordenados);
+    int j = n - 1;
+    for (i = 0; i < n; i++)
+    {
+        analytics->addSwaps();
+        (*reviews)[i] = ordenados[j];
+        j--;
+    }
+    writeTxt(reviews);
 }
 
 void File::quicksort(Review *reviews, int left, int right, Analytics *analytics)
@@ -428,7 +425,11 @@ void File::generateVector(long int n, int m, int algorithm)
             geraVetor(n);
             break;
         case 2:
-            countingsort(&v);
+            outputFile << endl;
+            outputFile << "CountingSort"
+                       << "\n"
+                       << endl;
+            countingsort(&v, &analytics);
             break;
         case 3:
             outputFile << endl;
@@ -448,7 +449,7 @@ void File::generateVector(long int n, int m, int algorithm)
 
         chrono::duration<double, std::milli> ms_double = stop - start;
 
-        outputFile << originalM - m + 1 << "Execucao" << endl;
+        outputFile << originalM - m + 1 << " Execucao" << endl;
         outputFile << "Comparacoes: " << analytics.getComparisons() << endl;
         outputFile << "Trocas: " << analytics.getSwaps() << endl;
         outputFile << "Tempo de execucao: " << ms_double.count() << "ms" << endl;
