@@ -22,10 +22,9 @@ public:
     void acessaRegistro(long int n);
     void testeImportacao();
     void printConsole(vector<Review> *reviewList);
-    void geraVetor(long int n);
-    void maxHeapify(vector<int> *heapReview, int n, int i);
-    void heapSort(vector<int> *heapReview, int n);
     void generateVector(long int n, int m, int algorithm);
+    void heapSort(Review heapReview[], long int len, Analytics *analytics);
+    void heapify(Review heapReview[], long int len, long int i, Analytics *analytics);
     void countingsort(vector<Review> *reviews, Analytics *analytics);
     void quicksort(Review *reviews, int left, int right, Analytics *analytics);
 };
