@@ -19,13 +19,15 @@ void openFile(int i)
     switch (i)
     {
     case 1:
-        file.testeImportacao();
+        cout << "1 - Teste dos algoritmos de ordenação" << endl;
+        cout << "2 - Teste de versões mais frequentes" << endl;
+
+        // inserir funções aqui
+
+
         break;
     case 2:
-        long int accessNumber;
-        cout << "Digite 1 numero para acessar diretamente o registro correspondente no arquivo binario: ";
-        cin >> accessNumber;
-        file.acessaRegistro(accessNumber);
+        file.versionCount(&review);
         break;
     case 3:
         int m;
@@ -80,7 +82,7 @@ void menu()
         cout << "========================================= " << endl;
         cout << "\t\tMENU:" << endl;
         cout << "1 - Acessar modulo de testes" << endl;
-        cout << "2 - Acessar registro do arquivo" << endl;
+        cout << "2 - Versões do aplicativo" << endl;
         cout << "3 - Algoritmos de Ordenacao" << endl;
         cout << "0 - Sair" << endl;
         cout << "========================================= " << endl;

@@ -27,6 +27,7 @@ public:
     void heapify(Review heapReview[], long int len, long int i, Analytics *analytics);
     void countingsort(vector<Review> *reviews, Analytics *analytics);
     void quicksort(Review *reviews, int left, int right, Analytics *analytics);
+    void versionCount(vector<Review> *review);
 };
 
 #endif

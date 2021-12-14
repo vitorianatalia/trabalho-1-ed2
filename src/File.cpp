@@ -8,6 +8,7 @@
 #include <time.h>
 #include <algorithm>
 #include <chrono>
+#include <TabelaHash.h>
 
 using namespace std;
 
@@ -348,7 +349,7 @@ void File::generateVector(long int n, int m, int algorithm)
     ifstream inputFile("tiktok_app_reviews.bin", ios::in | ios::binary);
     ofstream outputFile("results.txt", std::ofstream::out | std::ofstream::app);
 
-    srand(time(0));
+    srand(time(NULL));
 
     if (!inputFile.is_open())
     {
@@ -437,4 +438,13 @@ void File::generateVector(long int n, int m, int algorithm)
     outputFile << "Media de tempo de execucao: " << avgTime / originalM << "ms" << endl;
 
     outputFile.close();
+}
+
+void File:: versionCount(vector<Review> *review)
+{
+    HashTable<string,string> table;
+    
+    table.Put("chave", review->at(0).getAppVersion());
+    table.LookUp("chave");
+    
 }
