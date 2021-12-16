@@ -16,6 +16,7 @@ void openFile(int i)
     file.readFile(&review, "tiktok_app_reviews.csv");
     file.writeBin(&review);
 
+
     switch (i)
     {
     case 1:
@@ -35,7 +36,7 @@ void openFile(int i)
         int algorithm;
 
         cout << endl;
-        cout << "Algoritmo de ordenação: " << endl;
+        cout << "Algoritmo de ordenacao: " << endl;
         cout << "1 - HeapSort" << endl;
         cout << "2 - CountingSort" << endl;
         cout << "3 - QuickSort" << endl;
@@ -61,8 +62,8 @@ void openFile(int i)
         }
 
         n = n == 1 ? 10000 : n == 2 ? 50000
-                         : n == 3   ? 100000
-                         : n == 4   ? 500000
+                           : n == 3   ? 100000
+                           : n == 4   ? 500000
                                     : 1000000;
 
         file.generateVector(n, m, algorithm);
@@ -82,7 +83,7 @@ void menu()
         cout << "========================================= " << endl;
         cout << "\t\tMENU:" << endl;
         cout << "1 - Acessar modulo de testes" << endl;
-        cout << "2 - Versões do aplicativo" << endl;
+        cout << "2 - Versoes do aplicativo" << endl;
         cout << "3 - Algoritmos de Ordenacao" << endl;
         cout << "0 - Sair" << endl;
         cout << "========================================= " << endl;
@@ -106,6 +107,7 @@ void menu()
 
 int main()
 {
+    
     menu();
     cout << "Programa encerrado" << endl;
     return 0;

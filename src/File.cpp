@@ -253,55 +253,55 @@ void File::heapify(Review heapReview[], long int len, long int i, Analytics *ana
     }
 }
 
-void File::countingsort(vector<Review> *reviews, Analytics *analytics)
+void File::countingsort(Review *reviews, long int n, Analytics *analytics)
 {
-    long largest = reviews->at(0).getUpvotes();
-    long int n = reviews->size();
-    cout << "tamanho: " << n << endl;
+    cout << "entrou" << endl;
+    long largest = reviews[0].getUpvotes();
+    
+    cout << "tamanho: " << largest << endl;
     for (int i = 1; i < n; i++)
     {
-        if (largest < reviews->at(i).getUpvotes()) {
-            largest = reviews->at(i).getUpvotes();
+        if (largest < reviews[i].getUpvotes()) {
+            largest = reviews[i].getUpvotes();
             analytics->addComparisons();
         }
     }
 
-    int tam = largest + 1;
-    int count[tam];
-    Review ordenados[n];
+    long int tam = largest + 1;
+    long int *count = new long int[largest];
+    cout << sizeof(count) << endl;
+    Review *ordenados = new Review[n];
+    
+    
 
     int i;
-    cout << "For 1" << endl;
     for (i = 0; i <= largest; i++)
     {
         count[i] = 0;
     }
-    cout << "For 2" << endl;
     for (i = 0; i < n; i++)
     {
-        count[reviews->at(i).getUpvotes()]++;
+        count[reviews[i].getUpvotes()]++;
     }
-    cout << "For 3" << endl;
     for (i = 1; i <= largest; i++)
     {
         count[i] += count[i - 1];
     }
-    cout << "For 4" << endl;
     for (i = 0; i < n; i++)
     {
         analytics->addSwaps();
-        ordenados[count[reviews->at(i).getUpvotes()] - 1] = reviews->at(i);
-        count[reviews->at(i).getUpvotes()]--;
+        ordenados[count[reviews[i].getUpvotes()] - 1] = reviews[i];
+        count[reviews[i].getUpvotes()]--;
     }
-    cout << "For 5" << endl;
     int j = n - 1;
     for (i = 0; i < n; i++)
     {
         analytics->addSwaps();
-        (*reviews)[i] = ordenados[j];
+        reviews[i] = ordenados[j];
         j--;
     }
-    writeTxt(reviews);
+    delete [] ordenados;
+    delete [] count;
 }
 
 void File::quicksort(Review *reviews, int left, int right, Analytics *analytics)
@@ -377,7 +377,7 @@ void File::generateVector(long int n, int m, int algorithm)
     double avgTime = 0;
     int originalM = m;
 
-    Review vetorReviews[n];
+    Review *vetorReviews = new Review[n];
     for (long int i = 0; i < n; i++){
         vetorReviews[i] = v.at(i);
     }
@@ -399,7 +399,7 @@ void File::generateVector(long int n, int m, int algorithm)
             outputFile << "CountingSort"
                        << "\n"
                        << endl;
-            countingsort(&v, &analytics);
+            countingsort(v.data(), n, &analytics);
             break;
         case 3:
             outputFile << endl;
@@ -438,6 +438,7 @@ void File::generateVector(long int n, int m, int algorithm)
     outputFile << "Media de tempo de execucao: " << avgTime / originalM << "ms" << endl;
 
     outputFile.close();
+    delete [] vetorReviews;
 }
 
 void File:: versionCount(vector<Review> *review)
