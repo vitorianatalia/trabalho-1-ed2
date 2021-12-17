@@ -28,6 +28,7 @@ public:
     void countingsort(Review *reviews, long int n, Analytics *analytics);
     void quicksort(Review *reviews, int left, int right, Analytics *analytics);
     void versionCount(vector<Review> *review);
+    void testVector(int n, int m, int algorithm);
 };
 
 #endif
