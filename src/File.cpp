@@ -8,7 +8,7 @@
 #include <time.h>
 #include <algorithm>
 #include <chrono>
-#include <TabelaHash.h>
+#include <Hash.h>
 
 using namespace std;
 
@@ -218,12 +218,14 @@ void File::testeImportacao()
 
 void File::heapSort(Review heapReview[], long int len, Analytics *analytics)
 {
-    for (long int i = len / 2 - 1; i >= 0; i--){
-        heapify (heapReview, len, i, analytics);
+    for (long int i = len / 2 - 1; i >= 0; i--)
+    {
+        heapify(heapReview, len, i, analytics);
     }
 
-    for (long int i = len - 1; i >= 0; i--){
-        swap (heapReview[0], heapReview[i]);
+    for (long int i = len - 1; i >= 0; i--)
+    {
+        swap(heapReview[0], heapReview[i]);
         analytics->addSwaps();
         heapify(heapReview, i, 0, analytics);
     }
@@ -235,19 +237,22 @@ void File::heapify(Review heapReview[], long int len, long int i, Analytics *ana
     long int l = 2 * i;
     long int r = 2 * i + 1;
 
-    if (l < len && heapReview[l].getUpvotes() > heapReview[max].getUpvotes() ){
+    if (l < len && heapReview[l].getUpvotes() > heapReview[max].getUpvotes())
+    {
         analytics->addComparisons();
         max = l;
     }
 
-    if (r < len && heapReview[r].getUpvotes() > heapReview[max].getUpvotes() ){
+    if (r < len && heapReview[r].getUpvotes() > heapReview[max].getUpvotes())
+    {
         analytics->addComparisons();
         max = r;
     }
 
-    if (max != i){
+    if (max != i)
+    {
         analytics->addComparisons();
-        swap (heapReview[i], heapReview[max]);
+        swap(heapReview[i], heapReview[max]);
         analytics->addSwaps();
         heapify(heapReview, len, max, analytics);
     }
@@ -257,22 +262,19 @@ void File::countingsort(Review *reviews, long int n, Analytics *analytics)
 {
     cout << "entrou" << endl;
     long largest = reviews[0].getUpvotes();
-    
+
     cout << "tamanho: " << largest << endl;
     for (int i = 1; i < n; i++)
     {
-        if (largest < reviews[i].getUpvotes()) {
+        if (largest < reviews[i].getUpvotes())
+        {
             largest = reviews[i].getUpvotes();
             analytics->addComparisons();
         }
     }
 
-    long int tam = largest + 1;
-    long int *count = new long int[largest];
-    cout << sizeof(count) << endl;
+    long int *count = new long int[largest + 1];
     Review *ordenados = new Review[n];
-    
-    
 
     int i;
     for (i = 0; i <= largest; i++)
@@ -300,8 +302,8 @@ void File::countingsort(Review *reviews, long int n, Analytics *analytics)
         reviews[i] = ordenados[j];
         j--;
     }
-    delete [] ordenados;
-    delete [] count;
+    delete[] ordenados;
+    delete[] count;
 }
 
 void File::quicksort(Review *reviews, int left, int right, Analytics *analytics)
@@ -378,7 +380,8 @@ void File::generateVector(long int n, int m, int algorithm)
     int originalM = m;
 
     Review *vetorReviews = new Review[n];
-    for (long int i = 0; i < n; i++){
+    for (long int i = 0; i < n; i++)
+    {
         vetorReviews[i] = v.at(i);
     }
 
@@ -409,7 +412,6 @@ void File::generateVector(long int n, int m, int algorithm)
             quicksort(v.data(), 0, v.size() - 1, &analytics);
 
             break;
-
         default:
             cout << "Nenhum algoritmo selecionado" << endl;
             break;
@@ -438,14 +440,38 @@ void File::generateVector(long int n, int m, int algorithm)
     outputFile << "Media de tempo de execucao: " << avgTime / originalM << "ms" << endl;
 
     outputFile.close();
-    delete [] vetorReviews;
+    delete[] vetorReviews;
 }
 
-void File:: versionCount(vector<Review> *review)
-{
-    HashTable<string,string> table;
-    
-    table.Put("chave", review->at(0).getAppVersion());
-    table.LookUp("chave");
-    
-}
+// void File:: versionCount(vector<Review> *review)
+// {
+//     HashTable<string,string> table;
+
+//     Review aux;
+//     for (int i = 1; i <= 10000; i++)
+//     {
+//         //cout << review->at(i).getAppVersion() << endl;
+//         table.LookUp(to_string(table.randInt()));
+//         cout << endl;
+//         table.Put( to_string(table.randInt()), review->at(i).getAppVersion());
+//     }
+
+// }
+
+// void File::versionCount(vector<Review> *review)
+// {
+//     cout << "bumbum" << endl;
+//     long int length = review->size();
+//     cout << "length:" << length << endl;
+//     Hash *table = new Hash[length];
+//     cout << "bumbum3" << endl;
+//     cout << "coco" << endl;
+//     table->inicializar(&table, length);
+//     cout << "bumbum4" << endl;
+//     for (int i = 1; i <= length; i++)
+//     {
+//         table->inserir(&table, i, review->at(i).getAppVersion());
+//     }
+
+//     table->printTable(&table, length);
+// }

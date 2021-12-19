@@ -1,10 +1,12 @@
 #include "Review.h"
 #include "File.h"
+#include "Hash.h"
 #include "iostream"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string>
 #include <algorithm>
+
 using namespace std;
 
 void openFile(int i)
@@ -16,6 +18,7 @@ void openFile(int i)
     file.readFile(&review, "tiktok_app_reviews.csv");
     file.writeBin(&review);
 
+    Hash hash(review.size());
 
     switch (i)
     {
@@ -27,8 +30,8 @@ void openFile(int i)
 
 
         break;
-    case 2:
-        file.versionCount(&review);
+    case 2:                    
+
         break;
     case 3:
         int m;
