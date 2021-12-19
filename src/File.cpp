@@ -1,6 +1,7 @@
 #include "File.h"
 #include "Review.h"
 #include "Analytics.h"
+#include "Hash.h"
 #include <fstream>
 #include <string>
 #include <iostream>
@@ -8,7 +9,6 @@
 #include <time.h>
 #include <algorithm>
 #include <chrono>
-#include <Hash.h>
 
 using namespace std;
 
@@ -350,7 +350,7 @@ void File::generateVector(long int n, int m, int algorithm)
 {
     ifstream inputFile("tiktok_app_reviews.bin", ios::in | ios::binary);
     ofstream outputFile("saida.txt", std::ofstream::out | std::ofstream::app);
-    
+
     srand(time(NULL));
 
     if (!inputFile.is_open())
@@ -443,20 +443,11 @@ void File::generateVector(long int n, int m, int algorithm)
     delete[] vetorReviews;
 }
 
-void File:: versionCount(vector<Review> *review)
-{
-    HashTable<string,string> table;
-    
-    table.Put("chave", review->at(0).getAppVersion());
-    table.LookUp("chave");
-    
-}
-
-void File:: testVector(int n, int m, int algorithm)
+void File::testVector(int n, int m, int algorithm)
 {
     ifstream inputFile("tiktok_app_reviews.bin", ios::in | ios::binary);
     ofstream outputFile("teste.txt", std::ofstream::out | std::ofstream::app);
-    
+
     srand(time(NULL));
 
     if (!inputFile.is_open())
@@ -486,7 +477,8 @@ void File:: testVector(int n, int m, int algorithm)
     int originalM = m;
 
     Review *vetorReviews = new Review[n];
-    for (long int i = 0; i < n; i++){
+    for (long int i = 0; i < n; i++)
+    {
         vetorReviews[i] = v.at(i);
     }
 
@@ -550,5 +542,49 @@ void File:: testVector(int n, int m, int algorithm)
     outputFile << endl;
 
     outputFile.close();
-    delete [] vetorReviews;
+    delete[] vetorReviews;
+}
+
+void File::runHash(long int n)
+{
+    ifstream inputFile("tiktok_app_reviews.bin", ios::in | ios::binary);
+
+    srand(time(NULL));
+
+    if (!inputFile.is_open())
+    {
+        cout << "Error: Could not open file" << endl;
+        exit(1);
+    }
+
+    inputFile.seekg(0, std::ios::end);
+    long int tam = (inputFile.tellg() / sizeof(Review));
+    Review *vetorReviews = new Review[n];
+    Review review2;
+
+    for (int i = 0; i < n; i++)
+    {
+        long int result = 1 + (rand() % (tam - 1));
+        long int pos = result * sizeof(Review);
+        inputFile.seekg(pos);
+        inputFile.read(reinterpret_cast<char *>(&review2), sizeof(Review));
+        vetorReviews[i] = review2;
+    }
+
+    Hash hash(n);
+
+    for (int i = 0; i < n; i++)
+    {
+        if(hash.infoAlreadyExists(vetorReviews[i].getAppVersion()) == false){
+            hash.insert(vetorReviews[i].getAppVersion());
+        }else{
+            // contabilizar a repetição da versão para depois informar no terminal
+            // quais versões mais aparecem
+
+            // no final precisa ordenar o vetor de repetições
+        }
+    }
+
+    delete[] vetorReviews;
+    inputFile.close();
 }

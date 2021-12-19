@@ -1,17 +1,23 @@
-#include <list>
+#ifndef HASH_H_INCLUDED
+#define HASH_H_INCLUDED
+#include "ListaEncadeada.h"
+#include "No.h"
 
-using namespace std;
 
 class Hash
 {
 private:
-    int balde;
-    list<int> *table;
+    long long int size;
+    ListaEncadeada **linkedList;
 
 public:
-    Hash(int v);
+    Hash(long long int size);
+    ~Hash();
+    int hashfunction(string x);
     void insert(string x);
-    void del(int key);
-    int hashfunction(string x) { return (static_cast<int>(x) % balde); }
-    void displayhash();
+    No* search(string x);
+    void printLinkedList(string x);
+    bool infoAlreadyExists(string x);
 };
+
+#endif // HASH_H_INCLUDED

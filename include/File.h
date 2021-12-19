@@ -4,6 +4,7 @@
 #include "string.h"
 #include "vector"
 #include "Review.h"
+#include "Hash.h"
 #include "Analytics.h"
 
 using namespace std;
@@ -29,6 +30,7 @@ public:
     void quicksort(Review *reviews, int left, int right, Analytics *analytics);
     void versionCount(vector<Review> *review);
     void testVector(int n, int m, int algorithm);
+    void runHash(long int n);
 };
 
 #endif

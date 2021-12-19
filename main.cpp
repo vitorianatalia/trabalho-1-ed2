@@ -20,24 +20,26 @@ void openFile(int i)
     file.readFile(&review, "tiktok_app_reviews.csv");
     file.writeBin(&review);
 
-    Hash hash(review.size());
-
+    long int n;
+    
     switch (i)
     {
     case 1:
         for (int j = 1; j < 4; j++)
             file.testVector(100, 3, j);
         cout << "2 - Teste de versoes mais frequentes" << endl;
-        
-        // inserir funções aqui
-
         break;
     case 2:                    
+        cout << endl;
+        cout << "Quantidade de registros a considerar: ";
+        cin >> n;
+
+        file.runHash(n);
 
         break;
+
     case 3:
         int m;
-        long int n;
         int algorithm;
 
         cout << endl;
