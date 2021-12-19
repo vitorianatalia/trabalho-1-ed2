@@ -13,6 +13,8 @@ void openFile(int i)
 {
     File file;
 
+    using namespace std;
+
     vector<Review> review;
 
     file.readFile(&review, "tiktok_app_reviews.csv");
@@ -23,11 +25,11 @@ void openFile(int i)
     switch (i)
     {
     case 1:
-        cout << "1 - Teste dos algoritmos de ordenação" << endl;
-        cout << "2 - Teste de versões mais frequentes" << endl;
-
+        for (int j = 1; j < 4; j++)
+            file.testVector(100, 3, j);
+        cout << "2 - Teste de versoes mais frequentes" << endl;
+        
         // inserir funções aqui
-
 
         break;
     case 2:                    
@@ -85,9 +87,9 @@ void menu()
     {
         cout << "========================================= " << endl;
         cout << "\t\tMENU:" << endl;
-        cout << "1 - Acessar modulo de testes" << endl;
-        cout << "2 - Versoes do aplicativo" << endl;
-        cout << "3 - Algoritmos de Ordenacao" << endl;
+        cout << "1 - Modulo de Teste" << endl;
+        cout << "2 - Hash" << endl;
+        cout << "3 - Ordenacao" << endl;
         cout << "0 - Sair" << endl;
         cout << "========================================= " << endl;
 

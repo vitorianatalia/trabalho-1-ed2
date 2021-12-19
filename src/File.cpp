@@ -349,8 +349,8 @@ void File::quicksort(Review *reviews, int left, int right, Analytics *analytics)
 void File::generateVector(long int n, int m, int algorithm)
 {
     ifstream inputFile("tiktok_app_reviews.bin", ios::in | ios::binary);
-    ofstream outputFile("results.txt", std::ofstream::out | std::ofstream::app);
-
+    ofstream outputFile("saida.txt", std::ofstream::out | std::ofstream::app);
+    
     srand(time(NULL));
 
     if (!inputFile.is_open())
@@ -395,7 +395,7 @@ void File::generateVector(long int n, int m, int algorithm)
             outputFile << "HeapSort"
                        << "\n"
                        << endl;
-            heapSort(vetorReviews, n, &analytics);
+            heapSort(v.data(), n, &analytics);
             break;
         case 2:
             outputFile << endl;
@@ -443,35 +443,112 @@ void File::generateVector(long int n, int m, int algorithm)
     delete[] vetorReviews;
 }
 
-// void File:: versionCount(vector<Review> *review)
-// {
-//     HashTable<string,string> table;
+void File:: versionCount(vector<Review> *review)
+{
+    HashTable<string,string> table;
+    
+    table.Put("chave", review->at(0).getAppVersion());
+    table.LookUp("chave");
+    
+}
 
-//     Review aux;
-//     for (int i = 1; i <= 10000; i++)
-//     {
-//         //cout << review->at(i).getAppVersion() << endl;
-//         table.LookUp(to_string(table.randInt()));
-//         cout << endl;
-//         table.Put( to_string(table.randInt()), review->at(i).getAppVersion());
-//     }
+void File:: testVector(int n, int m, int algorithm)
+{
+    ifstream inputFile("tiktok_app_reviews.bin", ios::in | ios::binary);
+    ofstream outputFile("teste.txt", std::ofstream::out | std::ofstream::app);
+    
+    srand(time(NULL));
 
-// }
+    if (!inputFile.is_open())
+    {
+        cout << "Error: Could not open file" << endl;
+        exit(1);
+    }
 
-// void File::versionCount(vector<Review> *review)
-// {
-//     cout << "bumbum" << endl;
-//     long int length = review->size();
-//     cout << "length:" << length << endl;
-//     Hash *table = new Hash[length];
-//     cout << "bumbum3" << endl;
-//     cout << "coco" << endl;
-//     table->inicializar(&table, length);
-//     cout << "bumbum4" << endl;
-//     for (int i = 1; i <= length; i++)
-//     {
-//         table->inserir(&table, i, review->at(i).getAppVersion());
-//     }
+    Analytics analytics;
+    inputFile.seekg(0, std::ios::end);
+    long int tam = (inputFile.tellg() / sizeof(Review));
+    vector<Review> v;
+    Review review2;
 
-//     table->printTable(&table, length);
-// }
+    for (int i = 0; i < n; i++)
+    {
+        long int result = 1 + (rand() % (tam - 1));
+        long int pos = result * sizeof(Review);
+        inputFile.seekg(pos);
+        inputFile.read(reinterpret_cast<char *>(&review2), sizeof(Review));
+        v.push_back(review2);
+    }
+
+    int avgComparisons = 0;
+    int avgSwaps = 0;
+    double avgTime = 0;
+    int originalM = m;
+
+    Review *vetorReviews = new Review[n];
+    for (long int i = 0; i < n; i++){
+        vetorReviews[i] = v.at(i);
+    }
+
+    outputFile << "Teste de Ordencao " << algorithm << " =====================" << endl;
+
+    while (m > 0)
+    {
+        auto start = chrono::high_resolution_clock::now();
+        switch (algorithm)
+        {
+        case 1:
+            outputFile << endl;
+            outputFile << "HeapSort"
+                       << "\n"
+                       << endl;
+            heapSort(v.data(), n, &analytics);
+            break;
+        case 2:
+            outputFile << endl;
+            outputFile << "CountingSort"
+                       << "\n"
+                       << endl;
+            countingsort(v.data(), n, &analytics);
+            break;
+        case 3:
+            outputFile << endl;
+            outputFile << "QuickSort"
+                       << "\n"
+                       << endl;
+            quicksort(v.data(), 0, v.size() - 1, &analytics);
+
+            break;
+
+        default:
+            cout << "Nenhum algoritmo selecionado" << endl;
+            break;
+        }
+
+        auto stop = chrono::high_resolution_clock::now();
+
+        chrono::duration<double, std::milli> ms_double = stop - start;
+
+        outputFile << originalM - m + 1 << " Execucao" << endl;
+        outputFile << "Comparacoes: " << analytics.getComparisons() << endl;
+        outputFile << "Trocas: " << analytics.getSwaps() << endl;
+        outputFile << "Tempo de execucao: " << ms_double.count() << "ms" << endl;
+
+        avgComparisons += analytics.getComparisons();
+        avgSwaps += analytics.getSwaps();
+        avgTime += ms_double.count();
+
+        m--;
+        analytics.clear();
+    }
+
+    outputFile << endl;
+    outputFile << "Media de comparacoes: " << avgComparisons / originalM << endl;
+    outputFile << "Media de trocas: " << avgSwaps / originalM << endl;
+    outputFile << "Media de tempo de execucao: " << avgTime / originalM << "ms" << endl;
+    outputFile << "=========================================" << endl;
+    outputFile << endl;
+
+    outputFile.close();
+    delete [] vetorReviews;
+}
