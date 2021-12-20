@@ -572,19 +572,56 @@ void File::runHash(long int n)
     }
 
     Hash hash(n);
-
+    int contador = 0;
     for (int i = 0; i < n; i++)
     {
-        if(hash.infoAlreadyExists(vetorReviews[i].getAppVersion()) == false){
+        if (hash.infoAlreadyExists(vetorReviews[i].getAppVersion()) == false)
+        {
             hash.insert(vetorReviews[i].getAppVersion());
-        }else{
+        }
+        else
+        {
             // contabilizar a repetição da versão para depois informar no terminal
             // quais versões mais aparecem
-
+            contabiliza(vetorReviews[i].getAppVersion());
             // no final precisa ordenar o vetor de repetições
         }
+        imprimeHt();
     }
 
     delete[] vetorReviews;
     inputFile.close();
+}
+
+No *ht;
+
+void File::contabiliza(string key)
+{
+    No *p;
+    p = ht;
+    while (p != NULL && p->getInfo() != key)
+        p = p->getProx();
+    if (p != NULL)
+    {
+        int aux = p->getCount();
+        p->setCount(aux + 1);
+    }
+    else
+    {
+        p = new No();
+        p->setInfo(key);
+        p->setCount(1);
+        p->setProx(ht);
+        ht = p;
+    }
+    delete p;
+}
+
+void File::imprimeHt()
+{
+    while(ht != NULL)
+    {
+        cout << " " << ht->getInfo() << endl; 
+        ht = ht->getProx();
+    }
 }

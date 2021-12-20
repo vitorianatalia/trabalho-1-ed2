@@ -31,6 +31,8 @@ public:
     void versionCount(vector<Review> *review);
     void testVector(int n, int m, int algorithm);
     void runHash(long int n);
+    void contabiliza(string key);
+    void imprimeHt();
 };
 
 #endif

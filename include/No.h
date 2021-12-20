@@ -10,7 +10,7 @@ class No
 private:
     string info;
     No *prox;
-
+    int count;
 public:
     No(){};
     ~No(){};
@@ -34,6 +34,16 @@ public:
     {
         return prox;
     };
+
+    void setCount(int x)
+    {
+        this->count = x;
+    }
+
+    int getCount()
+    {
+        return count;
+    }
 };
 
 #endif
