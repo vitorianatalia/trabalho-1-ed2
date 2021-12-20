@@ -28,6 +28,7 @@ void openFile(int i)
         for (int j = 1; j < 4; j++)
             file.testVector(100, 3, j);
         cout << "2 - Teste de versoes mais frequentes" << endl;
+        file.runHash(100);
         break;
     case 2:                    
         cout << endl;
