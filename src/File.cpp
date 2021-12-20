@@ -260,10 +260,8 @@ void File::heapify(Review heapReview[], long int len, long int i, Analytics *ana
 
 void File::countingsort(Review *reviews, long int n, Analytics *analytics)
 {
-    cout << "entrou" << endl;
     long largest = reviews[0].getUpvotes();
 
-    cout << "tamanho: " << largest << endl;
     for (int i = 1; i < n; i++)
     {
         if (largest < reviews[i].getUpvotes())
@@ -572,7 +570,6 @@ void File::runHash(long int n)
     }
 
     Hash hash(n);
-    int contador = 0;
     for (int i = 1; i < n; i++)
     {
         if (hash.infoAlreadyExists(vetorReviews[i].getAppVersion()) == false)
@@ -580,11 +577,8 @@ void File::runHash(long int n)
             hash.insert(vetorReviews[i].getAppVersion());
         }
         else
-        {
-            // contabilizar a repetição da versão para depois informar no terminal
-            // quais versões mais aparecem
+        { 
             contabiliza(vetorReviews[i].getAppVersion());
-            // no final precisa ordenar o vetor de repetições
         }
         imprimeHt();
     }
