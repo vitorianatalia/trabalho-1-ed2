@@ -573,7 +573,7 @@ void File::runHash(long int n)
 
     Hash hash(n);
     int contador = 0;
-    for (int i = 0; i < n; i++)
+    for (int i = 1; i < n; i++)
     {
         if (hash.infoAlreadyExists(vetorReviews[i].getAppVersion()) == false)
         {
