@@ -268,7 +268,6 @@ void File::countingsort(Review *reviews, long int n, Analytics *analytics)
         if (largest < reviews[i].getUpvotes())
         {
             largest = reviews[i].getUpvotes();
-            analytics->addComparisons();
         }
     }
 
@@ -544,12 +543,59 @@ void File::testVector(int n, int m, int algorithm)
     delete[] vetorReviews;
 }
 
-
 void File::countingSortInt(int *v, int n){
-    for (int i = 0; i < n; i++)
+    long largest = v[0];
+
+    cout << "aqui" << endl;
+
+    for (int i = 1; i < n; i++)
     {
-        cout << v[i] << " ";
+        if (largest < v[i])
+        {
+            largest = v[i];
+        }
     }
+
+    cout << "aqui2" << endl;
+
+    long int *count = new long int[largest + 1];
+    int *ordenados = new int[n];
+
+    int i;
+    for (i = 0; i <= largest; i++)
+    {
+        count[i] = 0;
+    }
+
+    cout << "aqui3" << endl;
+    for (i = 0; i < n; i++)
+    {
+        count[v[i]]++;
+    }
+
+    cout << "aqui4" << endl;
+    for (i = 1; i <= largest; i++)
+    {
+        count[i] += count[i - 1];
+    }
+
+    cout << "aqui5" << endl;
+    for (i = 0; i < n; i++)
+    {
+        ordenados[count[v[i]] - 1] = v[i];
+        count[v[i]]--;
+    }
+
+    cout << "aqui6" << endl;
+    int j = n - 1;
+    for (i = 0; i < n; i++)
+    {
+        v[i] = ordenados[j];
+        j--;
+    }
+
+    delete[] ordenados;
+    delete[] count;
 }
 
 void File::runHash(long int n)
@@ -581,7 +627,7 @@ void File::runHash(long int n)
     Hash hash(n);
     map<string, int> mymap;
     map<string, int>::iterator it;
-    vector<int> v;
+    int *v = new int[n];
 
     for (int i = 0; i <= n; i++)
     {
@@ -597,15 +643,26 @@ void File::runHash(long int n)
         }
     }
 
+    int cont = 0;
     for (it = mymap.begin(); it != mymap.end(); it++)
     {
         int teste = it->second;
-        v.push_back(teste);
+        v[cont] = teste;
+        cont ++;
     }
 
-    for (int i = 0; i < 10; i++)
+    for (int i = 0; i < n; i++)
     {
-        cout << v.at(i) << " ";
+        cout << v[i] << " ";
+    }
+
+    cout << endl;
+
+    countingSortInt(v, n);
+
+    for (int i = 0; i < n; i++)
+    {
+        cout << v[i] << " ";
     }
 
     delete[] vetorReviews;
