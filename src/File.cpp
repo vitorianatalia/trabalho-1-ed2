@@ -9,6 +9,7 @@
 #include <time.h>
 #include <algorithm>
 #include <chrono>
+#include <map>
 
 using namespace std;
 
@@ -543,6 +544,14 @@ void File::testVector(int n, int m, int algorithm)
     delete[] vetorReviews;
 }
 
+
+void File::countingSortInt(int *v, int n){
+    for (int i = 0; i < n; i++)
+    {
+        cout << v[i] << " ";
+    }
+}
+
 void File::runHash(long int n)
 {
     ifstream inputFile("tiktok_app_reviews.bin", ios::in | ios::binary);
@@ -557,10 +566,10 @@ void File::runHash(long int n)
 
     inputFile.seekg(0, std::ios::end);
     long int tam = (inputFile.tellg() / sizeof(Review));
-    Review *vetorReviews = new Review[n];
+    Review *vetorReviews = new Review[n + 1];
     Review review2;
 
-    for (int i = 0; i < n; i++)
+    for (int i = 0; i <= n; i++)
     {
         long int result = 1 + (rand() % (tam - 1));
         long int pos = result * sizeof(Review);
@@ -570,52 +579,35 @@ void File::runHash(long int n)
     }
 
     Hash hash(n);
-    for (int i = 1; i < n; i++)
+    map<string, int> mymap;
+    map<string, int>::iterator it;
+    vector<int> v;
+
+    for (int i = 0; i <= n; i++)
     {
         if (hash.infoAlreadyExists(vetorReviews[i].getAppVersion()) == false)
         {
             hash.insert(vetorReviews[i].getAppVersion());
+            mymap[vetorReviews[i].getAppVersion()] = 0;
         }
         else
-        { 
-            contabiliza(vetorReviews[i].getAppVersion());
+        {
+            it = mymap.find(vetorReviews[i].getAppVersion());
+            it->second++;
         }
-        imprimeHt();
+    }
+
+    for (it = mymap.begin(); it != mymap.end(); it++)
+    {
+        int teste = it->second;
+        v.push_back(teste);
+    }
+
+    for (int i = 0; i < 10; i++)
+    {
+        cout << v.at(i) << " ";
     }
 
     delete[] vetorReviews;
     inputFile.close();
-}
-
-No *ht;
-
-void File::contabiliza(string key)
-{
-    No *p;
-    p = ht;
-    while (p != NULL && p->getInfo() != key)
-        p = p->getProx();
-    if (p != NULL)
-    {
-        int aux = p->getCount();
-        p->setCount(aux + 1);
-    }
-    else
-    {
-        p = new No();
-        p->setInfo(key);
-        p->setCount(1);
-        p->setProx(ht);
-        ht = p;
-    }
-    delete p;
-}
-
-void File::imprimeHt()
-{
-    while(ht != NULL)
-    {
-        cout << " " << ht->getInfo() << endl; 
-        ht = ht->getProx();
-    }
 }

@@ -28,11 +28,9 @@ public:
     void heapify(Review heapReview[], long int len, long int i, Analytics *analytics);
     void countingsort(Review *reviews, long int n, Analytics *analytics);
     void quicksort(Review *reviews, int left, int right, Analytics *analytics);
-    void versionCount(vector<Review> *review);
     void testVector(int n, int m, int algorithm);
     void runHash(long int n);
-    void contabiliza(string key);
-    void imprimeHt();
+    void countingSortInt(int *v, int n);
 };
 
 #endif
