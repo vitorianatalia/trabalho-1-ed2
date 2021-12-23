@@ -29,8 +29,8 @@ public:
     void countingsort(Review *reviews, long int n, Analytics *analytics);
     void quicksort(Review *reviews, int left, int right, Analytics *analytics);
     void testVector(int n, int m, int algorithm);
-    void runHash(long int n);
-    void countingSortInt(int *v, int n);
+    void runHash(long int n, int verificador);
+    void countingSortInt(vector <int> *v, int n);
 };
 
 #endif

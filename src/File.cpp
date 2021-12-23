@@ -543,20 +543,16 @@ void File::testVector(int n, int m, int algorithm)
     delete[] vetorReviews;
 }
 
-void File::countingSortInt(int *v, int n){
-    long largest = v[0];
-
-    cout << "aqui" << endl;
+void File::countingSortInt(vector<int> *v, int n){
+    long largest = v->at(0);
 
     for (int i = 1; i < n; i++)
     {
-        if (largest < v[i])
+        if (largest < v->at(i))
         {
-            largest = v[i];
+            largest = v->at(i);
         }
     }
-
-    cout << "aqui2" << endl;
 
     long int *count = new long int[largest + 1];
     int *ordenados = new int[n];
@@ -567,30 +563,26 @@ void File::countingSortInt(int *v, int n){
         count[i] = 0;
     }
 
-    cout << "aqui3" << endl;
     for (i = 0; i < n; i++)
     {
-        count[v[i]]++;
+        count[v->at(i)]++;
     }
 
-    cout << "aqui4" << endl;
     for (i = 1; i <= largest; i++)
     {
         count[i] += count[i - 1];
     }
 
-    cout << "aqui5" << endl;
     for (i = 0; i < n; i++)
     {
-        ordenados[count[v[i]] - 1] = v[i];
-        count[v[i]]--;
+        ordenados[count[v->at(i)] - 1] = v->at(i);
+        count[v->at(i)]--;
     }
 
-    cout << "aqui6" << endl;
     int j = n - 1;
     for (i = 0; i < n; i++)
     {
-        v[i] = ordenados[j];
+        v->at(i) = ordenados[j];
         j--;
     }
 
@@ -598,9 +590,10 @@ void File::countingSortInt(int *v, int n){
     delete[] count;
 }
 
-void File::runHash(long int n)
+void File::runHash(long int n, int verificador)
 {
     ifstream inputFile("tiktok_app_reviews.bin", ios::in | ios::binary);
+    ofstream outputFile("teste.txt", std::ofstream::out | std::ofstream::app);
 
     srand(time(NULL));
 
@@ -627,7 +620,7 @@ void File::runHash(long int n)
     Hash hash(n);
     map<string, int> mymap;
     map<string, int>::iterator it;
-    int *v = new int[n];
+    vector<int> v;
 
     for (int i = 0; i <= n; i++)
     {
@@ -643,27 +636,51 @@ void File::runHash(long int n)
         }
     }
 
-    int cont = 0;
     for (it = mymap.begin(); it != mymap.end(); it++)
     {
         int teste = it->second;
-        v[cont] = teste;
-        cont ++;
+        v.push_back(teste);
     }
 
-    for (int i = 0; i < n; i++)
+    for (int i = 0; i < v.size(); i++)
     {
-        cout << v[i] << " ";
+        cout << v.at(i) << " ";
     }
 
     cout << endl;
 
-    countingSortInt(v, n);
+    countingSortInt(&v, v.size());
 
-    for (int i = 0; i < n; i++)
+    for (int i = 0; i < v.size(); i++)
     {
-        cout << v[i] << " ";
+        cout << v.at(i) << " ";
     }
+
+    cout << endl;
+
+    map<string, int> myorderedmap;
+
+    cout << "VERSOES ORDENADAS PELA FREQUENCIA ==========" << endl;
+    outputFile << "VERSOES ORDENADAS PELA FREQUENCIA ==========" << endl;
+
+    for (int aux = 0; aux < v.size(); aux++)
+    {
+        for (it = mymap.begin(); it != mymap.end(); it++)
+        {
+            if(it->second == v.at(aux))
+            {
+                myorderedmap.insert(pair<string, int> (it->first, it->second));
+                mymap.erase(it);
+                cout << it->first << " ==> " << it->second << endl;
+                if(verificador)
+                {
+                    outputFile << it->first << " ==> " << it->second << endl;
+                }
+            }
+        }
+    }
+
+    cout << endl;
 
     delete[] vetorReviews;
     inputFile.close();
