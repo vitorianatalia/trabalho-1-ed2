@@ -599,13 +599,7 @@ void File::runHash(long int n)
 
     for (it = mymap.begin(); it != mymap.end(); it++)
     {
-        int teste = it->second;
-        v.push_back(teste);
-    }
-
-    for (int i = 0; i < 10; i++)
-    {
-        cout << v.at(i) << " ";
+        cout << it->first << " => " << it->second << endl;
     }
 
     delete[] vetorReviews;
