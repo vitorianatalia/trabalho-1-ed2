@@ -25,17 +25,18 @@ void openFile(int i)
     switch (i)
     {
     case 1:
+        cout << "1 - Teste dos algoritmos de ordenacao" << endl;
         for (int j = 1; j < 4; j++)
             file.testVector(100, 3, j);
         cout << "2 - Teste de versoes mais frequentes" << endl;
-        file.runHash(100);
+        file.runHash(100, 1);
         break;
     case 2:                    
         cout << endl;
         cout << "Quantidade de registros a considerar: ";
         cin >> n;
 
-        file.runHash(n);
+        file.runHash(n, 0);
 
         break;
 
