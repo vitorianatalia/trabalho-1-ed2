@@ -12,12 +12,14 @@ using namespace std;
 void openFile(int i)
 {
     File file;
-
-    using namespace std;
-
     vector<Review> review;
+    string path;
+    
+    cout << "Informe o caminho do arquivo csv\n";
+    cout << "Se o arquivo estiver na mesma pasta do executavel, basta informar o nome do arquivo.\n";
+    cin >> path;
 
-    file.readFile(&review, "tiktok_app_reviews.csv");
+    file.readFile(&review, path);
     file.writeBin(&review);
 
     long int n;

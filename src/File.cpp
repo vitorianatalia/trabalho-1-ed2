@@ -638,9 +638,6 @@ void File::runHash(long int n, int verificador)
 
     for (it = mymap.begin(); it != mymap.end(); it++)
     {
-<<<<<<< HEAD
-        cout << it->first << " => " << it->second << endl;
-=======
         int teste = it->second;
         v.push_back(teste);
     }
@@ -657,7 +654,6 @@ void File::runHash(long int n, int verificador)
     for (int i = 0; i < v.size(); i++)
     {
         cout << v.at(i) << " ";
->>>>>>> 7f5d4f4f0e927d7178862766910e11ee7bd826c7
     }
 
     cout << endl;
