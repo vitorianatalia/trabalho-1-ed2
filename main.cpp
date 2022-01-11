@@ -9,15 +9,15 @@
 
 using namespace std;
 
-void openFile(int i)
+void openFile(int i, string path)
 {
     File file;
     vector<Review> review;
-    string path;
+    //string path;
     
-    cout << "Informe o caminho do arquivo csv\n";
-    cout << "Se o arquivo estiver na mesma pasta do executavel, basta informar o nome do arquivo.\n";
-    cin >> path;
+    //cout << "Informe o caminho do arquivo csv\n";
+    //cout << "Se o arquivo estiver na mesma pasta do executavel, basta informar o nome do arquivo.\n";
+    //cin >> path;
 
     file.readFile(&review, path);
     file.writeBin(&review);
@@ -85,7 +85,7 @@ void openFile(int i)
     }
 }
 
-void menu()
+void menu(string path)
 {
     int i;
 
@@ -108,7 +108,7 @@ void menu()
         case 1:
         case 2:
         case 3:
-            openFile(i);
+            openFile(i, path);
             break;
         default:
             cout << "Valor digitado invalido" << endl;
@@ -116,10 +116,11 @@ void menu()
     } while (i);
 }
 
-int main()
+int main(int argc, char *argv[])
 {
-    
-    menu();
+    string path;
+    path = argv[1];
+    menu(path);
     cout << "Programa encerrado" << endl;
     return 0;
 }
