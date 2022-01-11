@@ -172,6 +172,9 @@ void File::testeImportacao()
 {
     ifstream inputFile("tiktok_app_reviews.bin", ios::in | ios::binary);
 
+    long int tam;
+    cout << "Numero de registros a considerar: "<< endl;
+    cin >> tam;
     srand(time(0));
 
     if (!inputFile.is_open())
@@ -180,7 +183,7 @@ void File::testeImportacao()
         exit(1);
     }
     inputFile.seekg(0, std::ios::end);
-    long int tam = (inputFile.tellg() / sizeof(Review));
+    //long int tam = (inputFile.tellg() / sizeof(Review));
 
     int n;
     cout << "Digite 10 para a saida no console ou 100 para a saida em arquivo .txt: ";
@@ -190,7 +193,7 @@ void File::testeImportacao()
     {
         vector<Review> randomReview;
         Review review2;
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < tam; i++)
         {
             long int result = 1 + (rand() % (tam - 1));
             long int pos = (result - 1) * sizeof(Review);
@@ -205,7 +208,7 @@ void File::testeImportacao()
     {
         vector<Review> randomReview;
         Review review2;
-        for (int i = 0; i < 100; i++)
+        for (int i = 0; i < tam; i++)
         {
             long int result = 1 + (rand() % (tam - 1));
             long int pos = (result - 1) * sizeof(Review);

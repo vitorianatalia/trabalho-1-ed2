@@ -13,11 +13,6 @@ void openFile(int i, string path)
 {
     File file;
     vector<Review> review;
-    //string path;
-    
-    //cout << "Informe o caminho do arquivo csv\n";
-    //cout << "Se o arquivo estiver na mesma pasta do executavel, basta informar o nome do arquivo.\n";
-    //cin >> path;
 
     file.readFile(&review, path);
     file.writeBin(&review);
@@ -31,9 +26,12 @@ void openFile(int i, string path)
         for (int j = 1; j < 4; j++)
             file.testVector(100, 3, j);
         cout << "2 - Teste de versoes mais frequentes" << endl;
-        file.runHash(100, 1);
+            file.runHash(100, 1);
+        cout << "3 - Teste de importacao" << endl;
+            file.testeImportacao();
         break;
-    case 2:                    
+    case 2:     
+                   
         cout << endl;
         cout << "Quantidade de registros a considerar: ";
         cin >> n;
