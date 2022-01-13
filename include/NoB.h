@@ -1,149 +1,134 @@
-#include<iostream>
+#ifndef NOB_H_INCLUDED
+#define NOB_H_INCLUDED
+
+#include <iostream>
+#include "TreeB.h"
 
 using namespace std;
 
 class NoB
 {
-	int *chave; 
-	int t;	 
-	NoB **filhos;
-	int n;	 
-	bool folha; 
+private:
+	int minDegree;
+	NoB **children;
+	int currentTotalNode;
+	bool leaf;
+	int *key;
+
+	friend class TreeB;
+
 public:
-	NoB(int _t, bool _folha); 
-	void insertNonFull(int k);
-	void splitChild(int i, NoB *y);
-	NoB *search(int k); 
-
-friend class ArvoreB;
-};
-
-class ArvoreB
-{
-	NoB *raiz; 
-	int t; 
-public:
-	ArvoreB(int _t)
-	{ raiz = NULL; t = _t; }
-
-	NoB* search(int k)
-	{ return (raiz == NULL)? NULL : raiz->search(k); }
-
-	void insert(int k);
-};
-
-NoB::NoB(int t1, bool folha1)
-{
-	t = t1;
-	folha = folha1;
-
-	chave = new int[2*t-1];
-	filhos = new NoB *[2*t];
-
-	n = 0;
-}
-
-NoB *NoB::search(int k)
-{
-	int i = 0;
-	while (i < n && k > chave[i])
-		i++;
-
-	if (chave[i] == k)
-		return this;
-
-	if (folha == true)
-		return NULL;
-
-	return filhos[i]->search(k);
-}
-
-void ArvoreB::insert(int k)
-{
-	if (raiz == NULL)
+	NoB(int t1, bool leafParam)
 	{
-		raiz = new NoB(t, true);
-		raiz->chave[0] = k;
-		raiz->n = 1; 
+		minDegree = t1;
+		leaf = leafParam;
+
+		key = new int[2 * minDegree - 1];
+		children = new NoB *[2 * minDegree];
+		currentTotalNode = 0;
 	}
-	else
+
+	NoB *NoB::search(int k)
 	{
-		if (raiz->n == 2*t-1)
-		{			
-			NoB *s = new NoB(t, false);
+		int i = 0;
+		while (i < currentTotalNode && k > key[i])
+			i++;
 
-			s->filhos[0] = raiz;
+		if (key[i] == k)
+			return this;
 
-			s->splitChild(0, raiz);
+		if (leaf == true)
+			return NULL;
 
-			int i = 0;
-			if (s->chave[0] < k)
-				i++;
-			s->filhos[i]->insertNonFull(k);
+		return children[i]->search(k);
+	}
 
-			raiz = s;
+	void transitByNode()
+	{
+
+		int i;
+		for (i = 0; i < currentTotalNode; i++)
+		{
+
+			if (leaf == false)
+				children[i]->transitByNode();
+			cout << " " << key[i];
+		}
+
+		if (leaf == false)
+			children[i]->transitByNode();
+	}
+
+	void splitChild(int i, NoB *node)
+	{
+
+		NoB *aux = new NoB(node->minDegree, node->leaf);
+		aux->currentTotalNode = minDegree - 1;
+
+		for (int j = 0; j < minDegree - 1; j++)
+		{
+			aux->key[j] = node->key[j + minDegree];
+		}
+
+		if (node->leaf == false)
+		{
+			for (int j = 0; j < minDegree; j++)
+				aux->children[j] = node->children[j + minDegree];
+		}
+
+		node->currentTotalNode = minDegree - 1;
+
+		for (int j = currentTotalNode; j >= i + 1; j--)
+		{
+			children[j + 1] = children[j];
+		}
+
+		children[i + 1] = aux;
+
+		for (int j = currentTotalNode - 1; j >= i; j--)
+		{
+			key[j + 1] = key[j];
+		}
+
+		key[i] = node->key[minDegree - 1];
+
+		currentTotalNode = currentTotalNode + 1;
+	}
+
+	void insertNonFull(int k)
+	{
+		int i = currentTotalNode - 1;
+
+		if (leaf == true)
+		{
+			while (i >= 0 && key[i] > k)
+			{
+				key[i + 1] = key[i];
+				i--;
+			}
+
+			key[i + 1] = k;
+			currentTotalNode = currentTotalNode + 1;
 		}
 		else
-			raiz->insertNonFull(k);
-	}
-}
-
-void NoB::insertNonFull(int k)
-{
-	int i = n-1;
-
-	if (folha == true)
-	{
-		while (i >= 0 && chave[i] > k)
 		{
-			chave[i+1] = chave[i];
-			i--;
+			while (i >= 0 && key[i] > k)
+			{
+				i--;
+			}
+
+			if (children[i + 1]->currentTotalNode == 2 * minDegree - 1)
+			{
+				splitChild(i + 1, children[i + 1]);
+
+				if (key[i + 1] < k)
+				{
+					i++;
+				}
+			}
+			children[i + 1]->insertNonFull(k);
 		}
-
-		chave[i+1] = k;
-		n = n+1;
 	}
-	else
-	{
-		while (i >= 0 && chave[i] > k)
-			i--;
+};
 
-		if (filhos[i+1]->n == 2*t-1)
-		{
-			splitChild(i+1, filhos[i+1]);
-
-			if (chave[i+1] < k)
-				i++;
-		}
-		filhos[i+1]->insertNonFull(k);
-	}
-}
-
-void NoB::splitChild(int i, NoB *y)
-{
-	NoB *z = new NoB(y->t, y->folha);
-	z->n = t - 1;
-
-	for (int j = 0; j < t-1; j++)
-		z->chave[j] = y->chave[j+t];
-
-	if (y->folha == false)
-	{
-		for (int j = 0; j < t; j++)
-			z->filhos[j] = y->filhos[j+t];
-	}
-
-	y->n = t - 1;
-
-	for (int j = n; j >= i+1; j--)
-		filhos[j+1] = filhos[j];
-
-	filhos[i+1] = z;
-
-	for (int j = n-1; j >= i; j--)
-		chave[j+1] = chave[j];
-
-	chave[i] = y->chave[t-1];
-
-	n = n + 1;
-}
+#endif
