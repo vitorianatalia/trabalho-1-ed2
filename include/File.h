@@ -21,7 +21,7 @@ public:
     void writeBin(vector<Review> *reviewList);
     void readBinary(vector<Review> *reviewList);
     void acessaRegistro(long int n);
-    void testeImportacao();
+    void testeImportacao(int i);
     void printConsole(vector<Review> *reviewList);
     void generateVector(long int n, int m, int algorithm);
     void heapSort(Review heapReview[], long int len, Analytics *analytics);

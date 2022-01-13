@@ -2,6 +2,8 @@
 #include "Review.h"
 #include "Analytics.h"
 #include "Hash.h"
+#include "NoB.h"
+#include "TreeB.h"
 #include <fstream>
 #include <string>
 #include <iostream>
@@ -168,7 +170,7 @@ void File::acessaRegistro(long int n)
     cout << endl;
 }
 
-void File::testeImportacao()
+void File::testeImportacao(int i)
 {
     ifstream inputFile("tiktok_app_reviews.bin", ios::in | ios::binary);
 
@@ -185,27 +187,47 @@ void File::testeImportacao()
     inputFile.seekg(0, std::ios::end);
     //long int tam = (inputFile.tellg() / sizeof(Review));
 
-    int n;
-    cout << "Digite 10 para a saida no console ou 100 para a saida em arquivo .txt: ";
-    cin >> n;
 
-    if (n == 10) // saida em console
+    if (i == 1)
     {
-        vector<Review> randomReview;
-        Review review2;
-        for (int i = 0; i < tam; i++)
+        int n;
+        cout << "Digite 10 para a saida no console ou 100 para a saida em arquivo .txt: ";
+        cin >> n;
+
+        if (n == 10) // saida em console
         {
-            long int result = 1 + (rand() % (tam - 1));
-            long int pos = (result - 1) * sizeof(Review);
-            cout << result << endl;
-            inputFile.seekg(pos);
-            inputFile.read(reinterpret_cast<char *>(&review2), sizeof(Review));
-            randomReview.push_back(review2);
+            vector<Review> randomReview;
+            Review review2;
+            for (int i = 0; i < tam; i++)
+            {
+                long int result = 1 + (rand() % (tam - 1));
+                long int pos = (result - 1) * sizeof(Review);
+                cout << result << endl;
+                inputFile.seekg(pos);
+                inputFile.read(reinterpret_cast<char *>(&review2), sizeof(Review));
+                randomReview.push_back(review2);
+            }
+            printConsole(&randomReview);
         }
-        printConsole(&randomReview);
+        else if (n == 100) // saida em texto
+        {
+            vector<Review> randomReview;
+            Review review2;
+            for (int i = 0; i < tam; i++)
+            {
+                long int result = 1 + (rand() % (tam - 1));
+                long int pos = (result - 1) * sizeof(Review);
+                inputFile.seekg(pos);
+                inputFile.read(reinterpret_cast<char *>(&review2), sizeof(Review));
+                randomReview.push_back(review2);
+            }
+            writeTxt(&randomReview);
+        }
     }
-    else if (n == 100) // saida em texto
+    
+    if(i==4)
     {
+        TreeB treeExample = TreeB(3);
         vector<Review> randomReview;
         Review review2;
         for (int i = 0; i < tam; i++)
@@ -215,8 +237,8 @@ void File::testeImportacao()
             inputFile.seekg(pos);
             inputFile.read(reinterpret_cast<char *>(&review2), sizeof(Review));
             randomReview.push_back(review2);
+            //treeExample.insert(review2.getReview_id(), pos); <- Adaptar o algoritmo para funcionar
         }
-        writeTxt(&randomReview);
     }
 }
 

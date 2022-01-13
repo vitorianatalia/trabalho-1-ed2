@@ -30,7 +30,7 @@ void openFile(int i, string path)
         cout << "2 - Teste de versoes mais frequentes" << endl;
             file.runHash(100, 1);
         cout << "3 - Teste de importacao" << endl;
-            file.testeImportacao();
+            file.testeImportacao(i);
         break;
     case 2:     
                    
@@ -80,6 +80,10 @@ void openFile(int i, string path)
         file.generateVector(n, m, algorithm);
         break;
 
+    case 4:
+        file.testeImportacao(i);
+        break;
+
     default:
         break;
     }
@@ -122,15 +126,19 @@ int main(int argc, char *argv[])
     path = argv[1];
 
     TreeB treeExample = TreeB(3);
+
+    openFile(4, path);
     
-    treeExample.insert(1);
+    /*
+    treeExample.insert(5);
     treeExample.insert(2);
     treeExample.insert(3);
+    treeExample.insert(1);
     treeExample.insert(4);
-    treeExample.insert(5);
 
     treeExample.printTree();
-
+    */
+    
     // menu(path);
   
     cout << endl;
