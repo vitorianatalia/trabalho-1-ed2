@@ -19,17 +19,6 @@ public:
         minDegree = t;
     }
 
-    void transitByTree()
-    {
-        if (root != NULL)
-            root->transitByNode();
-    }
-
-    NoB *search(int k)
-    {
-        return (root == NULL) ? NULL : root->search(k);
-    }
-
     void insert(int k)
     {
         if (root == NULL)
@@ -60,6 +49,12 @@ public:
                 root->insertNonFull(k);
             }
         }
+    }
+
+    void printTree()
+    {
+        if (root != NULL)
+            root->printNode();
     }
 };
 

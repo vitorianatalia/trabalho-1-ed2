@@ -28,37 +28,6 @@ public:
 		currentTotalNode = 0;
 	}
 
-	NoB *NoB::search(int k)
-	{
-		int i = 0;
-		while (i < currentTotalNode && k > key[i])
-			i++;
-
-		if (key[i] == k)
-			return this;
-
-		if (leaf == true)
-			return NULL;
-
-		return children[i]->search(k);
-	}
-
-	void transitByNode()
-	{
-
-		int i;
-		for (i = 0; i < currentTotalNode; i++)
-		{
-
-			if (leaf == false)
-				children[i]->transitByNode();
-			cout << " " << key[i];
-		}
-
-		if (leaf == false)
-			children[i]->transitByNode();
-	}
-
 	void splitChild(int i, NoB *node)
 	{
 
@@ -127,6 +96,17 @@ public:
 				}
 			}
 			children[i + 1]->insertNonFull(k);
+		}
+	}
+
+	void printNode()
+	{
+		cout << endl;
+		cout << "total de nos inseridos: " << currentTotalNode << endl;
+
+		for (int i = 0; i < currentTotalNode; i++)
+		{
+			cout << key[i] << " ";
 		}
 	}
 };

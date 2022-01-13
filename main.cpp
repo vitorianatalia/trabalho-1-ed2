@@ -6,6 +6,8 @@
 #include <stdlib.h>
 #include <string>
 #include <algorithm>
+#include "TreeB.h"
+#include "NoB.h"
 
 using namespace std;
 
@@ -118,7 +120,22 @@ int main(int argc, char *argv[])
 {
     string path;
     path = argv[1];
-    menu(path);
+
+    TreeB treeExample = TreeB(3);
+    
+    treeExample.insert(1);
+    treeExample.insert(2);
+    treeExample.insert(3);
+    treeExample.insert(4);
+    treeExample.insert(5);
+
+    treeExample.printTree();
+
+    // menu(path);
+  
+    cout << endl;
+    cout << endl;
+
     cout << "Programa encerrado" << endl;
     return 0;
 }
