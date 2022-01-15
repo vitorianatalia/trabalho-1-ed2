@@ -23,7 +23,6 @@ public:
     {
         if (root == NULL)
         {
-
             root = new NoB(minDegree, true);
             root->key[0] = k;
             root->currentTotalNode = 1;
@@ -36,10 +35,11 @@ public:
                 node->children[0] = root;
 
                 node->splitChild(0, root);
+
                 int i = 0;
                 if (node->key[0] < k)
                     i++;
-                
+
                 node->children[i]->insertNonFull(k);
 
                 root = node;
@@ -51,10 +51,15 @@ public:
         }
     }
 
-    void printTree()
+    void traverse()
     {
         if (root != NULL)
-            root->printNode();
+            root->traverse();
+    }
+
+    NoB *search(int k)
+    {
+        return (root == NULL) ? NULL : root->search(k);
     }
 };
 

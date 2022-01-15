@@ -2,8 +2,8 @@
 #include "Review.h"
 #include "Analytics.h"
 #include "Hash.h"
-#include "NoB.h"
 #include "TreeB.h"
+#include "NoB.h"
 #include <fstream>
 #include <string>
 #include <iostream>
@@ -175,7 +175,7 @@ void File::testeImportacao(int i)
     ifstream inputFile("tiktok_app_reviews.bin", ios::in | ios::binary);
 
     long int tam;
-    cout << "Numero de registros a considerar: "<< endl;
+    cout << "Numero de registros a considerar: " << endl;
     cin >> tam;
     srand(time(0));
 
@@ -185,7 +185,6 @@ void File::testeImportacao(int i)
         exit(1);
     }
     inputFile.seekg(0, std::ios::end);
-    //long int tam = (inputFile.tellg() / sizeof(Review));
 
 
     if (i == 1)
@@ -224,21 +223,37 @@ void File::testeImportacao(int i)
             writeTxt(&randomReview);
         }
     }
-    
-    if(i==4)
+
+    if (i == 4)
     {
-        TreeB treeExample = TreeB(3);
-        vector<Review> randomReview;
+        TreeB treeExample = TreeB(5);
         Review review2;
+
         for (int i = 0; i < tam; i++)
         {
-            long int result = 1 + (rand() % (tam - 1));
+            long int result = 1 + (rand() % (3000000 - 1));
             long int pos = (result - 1) * sizeof(Review);
             inputFile.seekg(pos);
             inputFile.read(reinterpret_cast<char *>(&review2), sizeof(Review));
-            randomReview.push_back(review2);
-            //treeExample.insert(review2.getReview_id(), pos); <- Adaptar o algoritmo para funcionar
+
+            cout << "ID: " << review2.getReview_id() << endl;
+            cout << "Posicao:" << pos << endl;
+            cout << "Resultado:" << result << endl;
+            cout << endl;
+
+            treeExample.insert(i);
         }
+
+        cout << "Traversal of the constructed tree is ";
+        treeExample.traverse();
+
+        int k = 11;
+        (treeExample.search(k) != NULL) ? cout << "\nPresent" : cout << "\nNot Present";
+
+        k = 100;
+        (treeExample.search(k) != NULL) ? cout << "\nPresent" : cout << "\nNot Present";
+
+        cout << endl;
     }
 }
 
@@ -568,7 +583,8 @@ void File::testVector(int n, int m, int algorithm)
     delete[] vetorReviews;
 }
 
-void File::countingSortInt(vector<int> *v, int n){
+void File::countingSortInt(vector<int> *v, int n)
+{
     long largest = v->at(0);
 
     for (int i = 1; i < n; i++)
@@ -692,12 +708,12 @@ void File::runHash(long int n, int verificador)
     {
         for (it = mymap.begin(); it != mymap.end(); it++)
         {
-            if(it->second == v.at(aux))
+            if (it->second == v.at(aux))
             {
-                myorderedmap.insert(pair<string, int> (it->first, it->second));
+                myorderedmap.insert(pair<string, int>(it->first, it->second));
                 mymap.erase(it);
                 cout << it->first << " ==> " << it->second << endl;
-                if(verificador)
+                if (verificador)
                 {
                     outputFile << it->first << " ==> " << it->second << endl;
                 }

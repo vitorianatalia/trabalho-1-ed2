@@ -9,9 +9,9 @@ using namespace std;
 class NoB
 {
 private:
-	int minDegree;
-	NoB **children;
-	int currentTotalNode;
+	int minDegree;		  // t;
+	NoB **children;		  // c;
+	int currentTotalNode; // n ;
 	bool leaf;
 	int *key;
 
@@ -99,15 +99,33 @@ public:
 		}
 	}
 
-	void printNode()
+	NoB *search(int k)
 	{
-		cout << endl;
-		cout << "total de nos inseridos: " << currentTotalNode << endl;
+		int i = 0;
+		while (i < currentTotalNode && k > key[i])
+			i++;
 
-		for (int i = 0; i < currentTotalNode; i++)
+		if (key[i] == k)
+			return this;
+
+		if (leaf == true)
+			return NULL;
+
+		return children[i]->search(k);
+	}
+
+	void traverse()
+	{
+		int i;
+		for (i = 0; i < currentTotalNode; i++)
 		{
-			cout << key[i] << " ";
+			if (leaf == false)
+				children[i]->traverse();
+			cout << " " << key[i];
 		}
+
+		if (leaf == false)
+			children[i]->traverse();
 	}
 };
 

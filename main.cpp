@@ -100,6 +100,7 @@ void menu(string path)
         cout << "1 - Modulo de Teste" << endl;
         cout << "2 - Hash" << endl;
         cout << "3 - Ordenacao" << endl;
+        cout << "4 - Arvore B." << endl;
         cout << "0 - Sair" << endl;
         cout << "========================================= " << endl;
 
@@ -112,6 +113,7 @@ void menu(string path)
         case 1:
         case 2:
         case 3:
+        case 4:
             openFile(i, path);
             break;
         default:
@@ -125,24 +127,7 @@ int main(int argc, char *argv[])
     string path;
     path = argv[1];
 
-    TreeB treeExample = TreeB(3);
-
-    openFile(4, path);
-    
-    /*
-    treeExample.insert(5);
-    treeExample.insert(2);
-    treeExample.insert(3);
-    treeExample.insert(1);
-    treeExample.insert(4);
-
-    treeExample.printTree();
-    */
-    
-    // menu(path);
-  
-    cout << endl;
-    cout << endl;
+    menu(path);
 
     cout << "Programa encerrado" << endl;
     return 0;
