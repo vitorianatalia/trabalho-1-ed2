@@ -1,4 +1,4 @@
-#ifndef TREEB_H_INCLUDED
+/*#ifndef TREEB_H_INCLUDED
 #define TREEB_H_INCLUDED
 
 #include <iostream>
@@ -58,4 +58,4 @@ public:
     }
 };
 
-#endif
+#endif*/

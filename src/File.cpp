@@ -225,7 +225,7 @@ void File::testeImportacao(int i)
         }
     }
     
-    if(i==4)
+    /*if(i==4)
     {
         TreeB treeExample = TreeB(3);
         vector<Review> randomReview;
@@ -239,7 +239,7 @@ void File::testeImportacao(int i)
             randomReview.push_back(review2);
             //treeExample.insert(review2.getReview_id(), pos); <- Adaptar o algoritmo para funcionar
         }
-    }
+    }*/
 }
 
 void File::heapSort(Review heapReview[], long int len, Analytics *analytics)

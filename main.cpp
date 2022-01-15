@@ -8,6 +8,8 @@
 #include <algorithm>
 #include "TreeB.h"
 #include "NoB.h"
+#include "RBNode.h"
+#include "RBTree.h"
 
 using namespace std;
 
@@ -125,7 +127,7 @@ int main(int argc, char *argv[])
     string path;
     path = argv[1];
 
-    TreeB treeExample = TreeB(3);
+    //TreeB treeExample = TreeB(3);
 
     openFile(4, path);
     
@@ -140,6 +142,18 @@ int main(int argc, char *argv[])
     */
     
     // menu(path);
+
+    RBTree tree = RBTree();
+    string a = ("amanha vai chover"),
+       b = ("bolacha nao eh biscoito"),
+       c = ("catarro verde"),
+       d = ("dipirona");
+    tree.insert(a);
+    tree.insert(b);
+    tree.insert(c);
+    tree.insert(d);
+
+    tree.printTree();
   
     cout << endl;
     cout << endl;
