@@ -143,17 +143,17 @@ int main(int argc, char *argv[])
     
     menu(path);
 
-    RBTree tree = RBTree();
-    string a = ("amanha vai chover"),
-       b = ("bolacha nao eh biscoito"),
-       c = ("catarro verde"),
-       d = ("dipirona");
-    tree.insert(a);
-    tree.insert(b);
-    tree.insert(c);
-    tree.insert(d);
+    // RBTree tree = RBTree();
+    // string a = ("amanha vai chover"),
+    //    b = ("bolacha nao eh biscoito"),
+    //    c = ("catarro verde"),
+    //    d = ("dipirona");
+    // tree.insert(a);
+    // tree.insert(b);
+    // tree.insert(c);
+    // tree.insert(d);
 
-    tree.printTree();
+    // tree.printTree();
   
     cout << endl;
     cout << endl;
