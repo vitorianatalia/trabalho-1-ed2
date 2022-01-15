@@ -16,12 +16,22 @@ private:
 public:
     RBTree() { root = NULL; };
     void insert(string &data);
+    Node *auxInsert(Node *root, Node *pt);
     void fixRules(Node *&, Node *&);
     void rotateLeft(Node *&, Node *&);
     void rotateRight(Node *&, Node *&);
+    void printTree();
+    void printHelper(Node *root, string indent, bool last);
 };
 
-Node *auxInsert(Node *root, Node *pt)
+void RBTree::insert(string &data)
+{
+    Node *pt = new Node(data);
+    root = auxInsert(root, pt);
+    fixRules(root, pt);
+}
+
+Node* RBTree::auxInsert(Node *root, Node *pt)
 {
     if (root == NULL)
         return pt;
@@ -160,10 +170,30 @@ void RBTree::rotateRight(Node *&root, Node *&pt)
     pt->setParent(pt_left);
 }
 
-void RBTree::insert(string &data)
-{
-    Node *pt = new Node(data);
-    root = auxInsert(root, pt);
-    fixRules(root, pt);
+
+
+void RBTree::printTree() {
+    if (root) {
+      printHelper(this->root, "", true);
+    }
 }
+
+void RBTree::printHelper(Node *root, string indent, bool last) {
+    if (root != NULL) {
+      cout << indent;
+      if (last) {
+        cout << "R----";
+        indent += "   ";
+      } else {
+        cout << "L----";
+        indent += "|  ";
+      }
+
+      string sColor = root->getColor() ? "RED" : "BLACK";
+      cout << root->getData() << "(" << sColor << ")" << endl;
+      printHelper(root->getLeft(), indent, false);
+      printHelper(root->getRight(), indent, true);
+    }
+}
+
 #endif
