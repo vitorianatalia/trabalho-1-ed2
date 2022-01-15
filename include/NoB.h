@@ -13,7 +13,7 @@ private:
 	NoB **children;		  // c;
 	int currentTotalNode; // n ;
 	bool leaf;
-	int *key;
+	KeyB *key;
 
 	friend class TreeB;
 
@@ -23,7 +23,7 @@ public:
 		minDegree = t1;
 		leaf = leafParam;
 
-		key = new int[2 * minDegree - 1];
+		key = new KeyB[2 * minDegree - 1];
 		children = new NoB *[2 * minDegree];
 		currentTotalNode = 0;
 	}
@@ -64,24 +64,24 @@ public:
 		currentTotalNode = currentTotalNode + 1;
 	}
 
-	void insertNonFull(int k)
+	void insertNonFull(KeyB no)
 	{
 		int i = currentTotalNode - 1;
 
 		if (leaf == true)
 		{
-			while (i >= 0 && key[i] > k)
+			while (i >= 0 && key[i].getId() > no.getId())
 			{
 				key[i + 1] = key[i];
 				i--;
 			}
 
-			key[i + 1] = k;
+			key[i + 1] = no;
 			currentTotalNode = currentTotalNode + 1;
 		}
 		else
 		{
-			while (i >= 0 && key[i] > k)
+			while (i >= 0 && key[i].getId() > no.getId())
 			{
 				i--;
 			}
@@ -90,28 +90,28 @@ public:
 			{
 				splitChild(i + 1, children[i + 1]);
 
-				if (key[i + 1] < k)
+				if (key[i + 1].getId() < no.getId())
 				{
 					i++;
 				}
 			}
-			children[i + 1]->insertNonFull(k);
+			children[i + 1]->insertNonFull(no);
 		}
 	}
 
-	NoB *search(int k)
+	NoB *search(KeyB no)
 	{
 		int i = 0;
-		while (i < currentTotalNode && k > key[i])
+		while (i < currentTotalNode && no.getId() > key[i].getId())
 			i++;
 
-		if (key[i] == k)
+		if (key[i].getId() == no.getId())
 			return this;
 
 		if (leaf == true)
 			return NULL;
 
-		return children[i]->search(k);
+		return children[i]->search(no);
 	}
 
 	void traverse()
@@ -121,7 +121,8 @@ public:
 		{
 			if (leaf == false)
 				children[i]->traverse();
-			cout << " " << key[i];
+			cout << " " << key[i].getId();
+			cout << endl;
 		}
 
 		if (leaf == false)

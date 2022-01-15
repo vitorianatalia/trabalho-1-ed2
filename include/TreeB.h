@@ -1,10 +1,13 @@
 #ifndef TREEB_H_INCLUDED
 #define TREEB_H_INCLUDED
 
+#include <string.h>
 #include <iostream>
+#include "KeyB.h"
 #include "NoB.h"
 
 using namespace std;
+
 
 class TreeB
 {
@@ -19,12 +22,12 @@ public:
         minDegree = t;
     }
 
-    void insert(int k)
+    void insert(KeyB no)
     {
         if (root == NULL)
         {
             root = new NoB(minDegree, true);
-            root->key[0] = k;
+            root->key[0] = no;
             root->currentTotalNode = 1;
         }
         else
@@ -37,16 +40,16 @@ public:
                 node->splitChild(0, root);
 
                 int i = 0;
-                if (node->key[0] < k)
+                if (node->key[0].getId() < no.getId())
                     i++;
 
-                node->children[i]->insertNonFull(k);
+                node->children[i]->insertNonFull(no);
 
                 root = node;
             }
             else
             {
-                root->insertNonFull(k);
+                root->insertNonFull(no);
             }
         }
     }
@@ -57,9 +60,9 @@ public:
             root->traverse();
     }
 
-    NoB *search(int k)
+    NoB *search(KeyB noTeste)
     {
-        return (root == NULL) ? NULL : root->search(k);
+        return (root == NULL) ? NULL : root->search(noTeste);
     }
 };
 

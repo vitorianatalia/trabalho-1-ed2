@@ -3,6 +3,7 @@
 #include "Analytics.h"
 #include "Hash.h"
 #include "TreeB.h"
+#include "KeyB.h"
 #include "NoB.h"
 #include <fstream>
 #include <string>
@@ -241,17 +242,18 @@ void File::testeImportacao(int i)
             cout << "Resultado:" << result << endl;
             cout << endl;
 
-            treeExample.insert(i);
+            KeyB noArvoreB;
+            noArvoreB.setPosition(result);
+            noArvoreB.setId(review2.getReview_id());
+
+            treeExample.insert(noArvoreB);
         }
 
         cout << "Traversal of the constructed tree is ";
         treeExample.traverse();
 
-        int k = 11;
-        (treeExample.search(k) != NULL) ? cout << "\nPresent" : cout << "\nNot Present";
-
-        k = 100;
-        (treeExample.search(k) != NULL) ? cout << "\nPresent" : cout << "\nNot Present";
+        /*KeyB noATeste;
+        (treeExample.search(noATeste) != NULL) ? cout << "\nPresent" : cout << "\nNot Present";*/
 
         cout << endl;
     }
