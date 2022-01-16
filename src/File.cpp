@@ -188,7 +188,7 @@ void File::testeImportacao(int i)
     inputFile.seekg(0, std::ios::end);
 
 
-    if (i == 1)
+    if (i == 2)
     {
         int n;
         cout << "Digite 10 para a saida no console ou 100 para a saida em arquivo .txt: ";
@@ -225,7 +225,28 @@ void File::testeImportacao(int i)
         }
     }
 
-    if (i == 4)
+    if(i == 1) {
+        RBTree tree = RBTree();
+        Review review2;
+
+        for (int i = 0; i < tam; i++)
+        {
+            long int result = 1 + (rand() % (3000000 - 1));
+            long int pos = (result - 1) * sizeof(Review);
+            inputFile.seekg(pos);
+            inputFile.read(reinterpret_cast<char *>(&review2), sizeof(Review));
+
+            cout << "ID: " << review2.getReview_id() << endl;
+            cout << "Posicao:" << pos << endl;
+            cout << endl;
+            string a = (review2.getReview_id());
+            
+            tree.insert(a, pos);
+        }
+        tree.printTree();
+    }
+    
+    if (i == 2)
     {
         TreeB treeExample = TreeB(5);
         Review review2;
@@ -256,27 +277,6 @@ void File::testeImportacao(int i)
         cout << endl;
     }
 
-    if(i == 5) {
-        RBTree tree = RBTree();
-        Review review2;
-
-        for (int i = 0; i < tam; i++)
-        {
-            long int result = 1 + (rand() % (3000000 - 1));
-            long int pos = (result - 1) * sizeof(Review);
-            inputFile.seekg(pos);
-            inputFile.read(reinterpret_cast<char *>(&review2), sizeof(Review));
-
-            cout << "ID: " << review2.getReview_id() << endl;
-            cout << "Posicao:" << pos << endl;
-            cout << endl;
-            string a = (review2.getReview_id());
-            
-            tree.insert(a, pos);
-        }
-        tree.printTree();
-
-    }
 }
 
 void File::heapSort(Review heapReview[], long int len, Analytics *analytics)

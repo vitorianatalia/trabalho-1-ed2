@@ -24,16 +24,7 @@ void openFile(int i, string path)
     
     switch (i)
     {
-    case 1:
-        cout << "1 - Teste dos algoritmos de ordenacao" << endl;
-        for (int j = 1; j < 4; j++)
-            file.testVector(100, 3, j);
-        cout << "2 - Teste de versoes mais frequentes" << endl;
-            file.runHash(100, 1);
-        cout << "3 - Teste de importacao" << endl;
-            file.testeImportacao(i);
-        break;
-    case 2:     
+    case 1:     
                    
         cout << endl;
         cout << "Quantidade de registros a considerar: ";
@@ -41,6 +32,16 @@ void openFile(int i, string path)
 
         file.runHash(n, 0);
 
+        break;
+
+    case 2:
+        cout << "1 - Teste dos algoritmos de ordenacao" << endl;
+        for (int j = 1; j < 4; j++)
+            file.testVector(100, 3, j);
+        cout << "2 - Teste de versoes mais frequentes" << endl;
+            file.runHash(100, 1);
+        cout << "3 - Teste de importacao" << endl;
+            file.testeImportacao(i);
         break;
 
     case 3:
@@ -82,7 +83,15 @@ void openFile(int i, string path)
         break;
 
     case 4:
-        file.testeImportacao(i);
+        int n;
+        cout << "Selecione uma das arvores a seguir:" << endl;
+        cout << "1 - Arvore Vermelho-Preto" << endl;
+        cout << "2 - Arvore B." << endl;
+        cout << "3 - Sair" << endl;
+        cin >> n;
+        if (n == 1 || n == 2) {
+            file.testeImportacao(n);
+        }
         break;
     
     case 5:
@@ -102,11 +111,10 @@ void menu(string path)
     {
         cout << "========================================= " << endl;
         cout << "\t\tMENU:" << endl;
-        cout << "1 - Modulo de Teste" << endl;
-        cout << "2 - Hash" << endl;
+        cout << "1 - Hash" << endl;
+        cout << "2 - Modulo de Teste" << endl;
         cout << "3 - Ordenacao" << endl;
-        cout << "4 - Arvore B." << endl;
-        cout << "5 - Arvore Rubro-Negra" << endl;
+        cout << "4 - Arvores" << endl;
         cout << "0 - Sair" << endl;
         cout << "========================================= " << endl;
 
@@ -120,7 +128,6 @@ void menu(string path)
         case 2:
         case 3:
         case 4:
-        case 5:
             openFile(i, path);
             break;
         default:
