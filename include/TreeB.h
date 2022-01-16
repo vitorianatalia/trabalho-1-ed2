@@ -5,6 +5,7 @@
 #include <iostream>
 #include "KeyB.h"
 #include "NoB.h"
+#include "Analytics.h"
 
 using namespace std;
 
@@ -22,7 +23,7 @@ public:
         minDegree = t;
     }
 
-    void insert(KeyB no)
+    void insert(KeyB no, Analytics *analytics)
     {
         if (root == NULL)
         {
@@ -37,32 +38,28 @@ public:
                 NoB *node = new NoB(minDegree, false);
                 node->children[0] = root;
 
-                node->splitChild(0, root);
-
+                node->splitChild(0, root, analytics);
+                
                 int i = 0;
-                if (node->key[0].getId() < no.getId())
+                if (node->key[0].getId() < no.getId()){
+                    analytics->addComparisons();
                     i++;
+                }
 
-                node->children[i]->insertNonFull(no);
+                node->children[i]->insertNonFull(no, analytics);
 
                 root = node;
             }
             else
             {
-                root->insertNonFull(no);
+                root->insertNonFull(no, analytics);
             }
         }
     }
 
-    void traverse()
+    NoB *search(string searchKey, Analytics *analytics)
     {
-        if (root != NULL)
-            root->traverse();
-    }
-
-    NoB *search(KeyB noTeste)
-    {
-        return (root == NULL) ? NULL : root->search(noTeste);
+        return (root == NULL) ? NULL : root->search(searchKey, analytics);
     }
 };
 

@@ -128,35 +128,8 @@ int main(int argc, char *argv[])
 {
     string path;
     path = argv[1];
-
-    //TreeB treeExample = TreeB(3);
-
-    /*
-    treeExample.insert(5);
-    treeExample.insert(2);
-    treeExample.insert(3);
-    treeExample.insert(1);
-    treeExample.insert(4);
-
-    treeExample.printTree();
-    */
     
     menu(path);
-
-    // RBTree tree = RBTree();
-    // string a = ("amanha vai chover"),
-    //    b = ("bolacha nao eh biscoito"),
-    //    c = ("catarro verde"),
-    //    d = ("dipirona");
-    // tree.insert(a);
-    // tree.insert(b);
-    // tree.insert(c);
-    // tree.insert(d);
-
-    // tree.printTree();
-  
-    cout << endl;
-    cout << endl;
 
     cout << "Programa encerrado" << endl;
     return 0;

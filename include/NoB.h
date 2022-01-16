@@ -3,15 +3,16 @@
 
 #include <iostream>
 #include "TreeB.h"
+#include "Analytics.h"
 
 using namespace std;
 
 class NoB
 {
 private:
-	int minDegree;		  // t;
-	NoB **children;		  // c;
-	int currentTotalNode; // n ;
+	int minDegree;
+	NoB **children;
+	int currentTotalNode;
 	bool leaf;
 	KeyB *key;
 
@@ -28,7 +29,7 @@ public:
 		currentTotalNode = 0;
 	}
 
-	void splitChild(int i, NoB *node)
+	void splitChild(int i, NoB *node, Analytics *analytics)
 	{
 
 		NoB *aux = new NoB(node->minDegree, node->leaf);
@@ -49,6 +50,7 @@ public:
 
 		for (int j = currentTotalNode; j >= i + 1; j--)
 		{
+			analytics->addComparisons();
 			children[j + 1] = children[j];
 		}
 
@@ -56,6 +58,7 @@ public:
 
 		for (int j = currentTotalNode - 1; j >= i; j--)
 		{
+			analytics->addComparisons();
 			key[j + 1] = key[j];
 		}
 
@@ -64,7 +67,7 @@ public:
 		currentTotalNode = currentTotalNode + 1;
 	}
 
-	void insertNonFull(KeyB no)
+	void insertNonFull(KeyB no, Analytics *analytics)
 	{
 		int i = currentTotalNode - 1;
 
@@ -72,6 +75,7 @@ public:
 		{
 			while (i >= 0 && key[i].getId() > no.getId())
 			{
+				analytics->addComparisons();
 				key[i + 1] = key[i];
 				i--;
 			}
@@ -83,50 +87,40 @@ public:
 		{
 			while (i >= 0 && key[i].getId() > no.getId())
 			{
+				analytics->addComparisons();
 				i--;
 			}
 
 			if (children[i + 1]->currentTotalNode == 2 * minDegree - 1)
 			{
-				splitChild(i + 1, children[i + 1]);
+				analytics->addComparisons();
+				splitChild(i + 1, children[i + 1], analytics);
 
 				if (key[i + 1].getId() < no.getId())
 				{
 					i++;
+					analytics->addComparisons();
 				}
 			}
-			children[i + 1]->insertNonFull(no);
+			children[i + 1]->insertNonFull(no, analytics);
 		}
 	}
 
-	NoB *search(KeyB no)
+	NoB *search(string searchKey, Analytics *analytics)
 	{
 		int i = 0;
-		while (i < currentTotalNode && no.getId() > key[i].getId())
+		while (i < currentTotalNode && searchKey > key[i].getId()){
+			analytics->addComparisons();
 			i++;
+		}
 
-		if (key[i].getId() == no.getId())
+		if (key[i].getId() == searchKey)
 			return this;
 
 		if (leaf == true)
 			return NULL;
 
-		return children[i]->search(no);
-	}
-
-	void traverse()
-	{
-		int i;
-		for (i = 0; i < currentTotalNode; i++)
-		{
-			if (leaf == false)
-				children[i]->traverse();
-			cout << " " << key[i].getId();
-			cout << endl;
-		}
-
-		if (leaf == false)
-			children[i]->traverse();
+		return children[i]->search(searchKey, analytics);
 	}
 };
 

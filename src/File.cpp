@@ -174,9 +174,10 @@ void File::acessaRegistro(long int n)
 void File::testeImportacao(int i)
 {
     ifstream inputFile("tiktok_app_reviews.bin", ios::in | ios::binary);
+    ofstream outputFile("saida.txt", std::ofstream::out);
 
     long int tam;
-    cout << "Numero de registros a considerar: " << endl;
+    cout << "Numero de registros a considerar: ";
     cin >> tam;
     srand(time(0));
 
@@ -227,8 +228,12 @@ void File::testeImportacao(int i)
 
     if (i == 4)
     {
-        TreeB treeExample = TreeB(5);
+        TreeB tree = TreeB(20);
         Review review2;
+        Analytics analyticsForInsert;   
+        Analytics analyticsForSearch;
+
+        auto start = chrono::high_resolution_clock::now();
 
         for (int i = 0; i < tam; i++)
         {
@@ -237,26 +242,60 @@ void File::testeImportacao(int i)
             inputFile.seekg(pos);
             inputFile.read(reinterpret_cast<char *>(&review2), sizeof(Review));
 
-            cout << "ID: " << review2.getReview_id() << endl;
-            cout << "Posicao:" << pos << endl;
-            cout << "Resultado:" << result << endl;
-            cout << endl;
-
             KeyB noArvoreB;
             noArvoreB.setPosition(result);
             noArvoreB.setId(review2.getReview_id());
 
-            treeExample.insert(noArvoreB);
+            tree.insert(noArvoreB, &analyticsForInsert);
         }
 
-        cout << "Traversal of the constructed tree is ";
-        treeExample.traverse();
+        auto stop = chrono::high_resolution_clock::now();
+        chrono::duration<double, std::milli> ms_double = stop - start;
 
-        /*KeyB noATeste;
-        (treeExample.search(noATeste) != NULL) ? cout << "\nPresent" : cout << "\nNot Present";*/
+        outputFile << "ARVORE B "<< endl;
+        outputFile << endl;
+        outputFile << "Numero de registros aleatorios inseridos: " << tam << endl;
+        outputFile << "Comparacoes durante as insercoes: " << analyticsForInsert.getComparisons() << endl;
+        outputFile << "Tempo durante as insercoes: " << ms_double.count() << " ms" << endl;
 
-        cout << endl;
+        long int b;
+        cout << "Numero de registros aleatorios que a serem buscados:";
+        cin >> b;
+
+        if(b > tam){
+            cout << "Numero de buscas maior que o numero de registros lidos" << endl;
+            exit(1);
+        }
+
+        start = chrono::high_resolution_clock::now();
+
+        for (int i = 0; i < b; i++)
+        {
+            long int result = 1 + (rand() % (3000000 - 1));
+            long int pos = (result - 1) * sizeof(Review);
+            inputFile.seekg(pos);
+            inputFile.read(reinterpret_cast<char *>(&review2), sizeof(Review));
+
+            tree.search(review2.getReview_id(), &analyticsForSearch);
+        }
+
+        tree.search("7ncisnbi4298", &analyticsForSearch);
+
+        stop = chrono::high_resolution_clock::now();
+        ms_double = stop - start;
+
+        outputFile << endl;
+        outputFile << "Numero de registros aleatorios buscados: " << b << endl;
+        outputFile << "Comparacoes durante as buscas: " << analyticsForSearch.getComparisons() << endl;
+        outputFile << "Tempo durante as buscas: " << ms_double.count() << " ms" << endl;
+
+        cout << "As analises foram feitas com sucesso, e voce pode consulta-las no arquivo saida.txt" << endl;
+
+        inputFile.close();
+        outputFile.close();
+        exit(0);
     }
+
 }
 
 void File::heapSort(Review heapReview[], long int len, Analytics *analytics)
