@@ -172,10 +172,9 @@ void File::acessaRegistro(long int n)
     cout << endl;
 }
 
-void File::testeImportacao(int i)
+void File::testeImportacao()
 {
     ifstream inputFile("tiktok_app_reviews.bin", ios::in | ios::binary);
-    ofstream outputFile("saida.txt", std::ofstream::out);
 
     long int tam;
     cout << "Numero de registros a considerar: ";
@@ -189,141 +188,39 @@ void File::testeImportacao(int i)
     }
     inputFile.seekg(0, std::ios::end);
 
+    int n;
+    cout << "Digite 10 para a saida no console ou 100 para a saida em arquivo .txt: ";
+    cin >> n;
 
-    if (i == 2)
+    if (n == 10) // saida em console
     {
-        int n;
-        cout << "Digite 10 para a saida no console ou 100 para a saida em arquivo .txt: ";
-        cin >> n;
-
-        if (n == 10) // saida em console
-        {
-            vector<Review> randomReview;
-            Review review2;
-            for (int i = 0; i < tam; i++)
-            {
-                long int result = 1 + (rand() % (tam - 1));
-                long int pos = (result - 1) * sizeof(Review);
-                cout << result << endl;
-                inputFile.seekg(pos);
-                inputFile.read(reinterpret_cast<char *>(&review2), sizeof(Review));
-                randomReview.push_back(review2);
-            }
-            printConsole(&randomReview);
-        }
-        else if (n == 100) // saida em texto
-        {
-            vector<Review> randomReview;
-            Review review2;
-            for (int i = 0; i < tam; i++)
-            {
-                long int result = 1 + (rand() % (tam - 1));
-                long int pos = (result - 1) * sizeof(Review);
-                inputFile.seekg(pos);
-                inputFile.read(reinterpret_cast<char *>(&review2), sizeof(Review));
-                randomReview.push_back(review2);
-            }
-            writeTxt(&randomReview);
-        }
-    }
-
-    if(i == 1) {
-        RBTree tree = RBTree();
+        vector<Review> randomReview;
         Review review2;
-
         for (int i = 0; i < tam; i++)
         {
-            long int result = 1 + (rand() % (3000000 - 1));
+            long int result = 1 + (rand() % (tam - 1));
             long int pos = (result - 1) * sizeof(Review);
+            cout << result << endl;
             inputFile.seekg(pos);
             inputFile.read(reinterpret_cast<char *>(&review2), sizeof(Review));
-
-            cout << "ID: " << review2.getReview_id() << endl;
-            cout << "Posicao:" << pos << endl;
-            cout << endl;
-            string a = (review2.getReview_id());
-            
-            tree.insert(a, pos);
+            randomReview.push_back(review2);
         }
-        tree.printTree();
+        printConsole(&randomReview);
     }
-    
-    if (i == 2)
+    else if (n == 100) // saida em texto
     {
-        TreeB tree = TreeB(20);
+        vector<Review> randomReview;
         Review review2;
-        Analytics analyticsForInsert;   
-        Analytics analyticsForSearch;
-
-        auto start = chrono::high_resolution_clock::now();
-
         for (int i = 0; i < tam; i++)
         {
-            long int result = 1 + (rand() % (3000000 - 1));
+            long int result = 1 + (rand() % (tam - 1));
             long int pos = (result - 1) * sizeof(Review);
             inputFile.seekg(pos);
             inputFile.read(reinterpret_cast<char *>(&review2), sizeof(Review));
-
-<<<<<<< HEAD
-            KeyB noArvoreB;
-            noArvoreB.setPosition(result);
-            noArvoreB.setId(review2.getReview_id());
-=======
-            cout << "ID: " << review2.getReview_id() << endl;
-            cout << "Posicao:" << pos << endl;
-            cout << endl;
->>>>>>> fe072a2d7c0eda30cbc393cb00dec41abce05137
-
-            tree.insert(noArvoreB, &analyticsForInsert);
+            randomReview.push_back(review2);
         }
-
-        auto stop = chrono::high_resolution_clock::now();
-        chrono::duration<double, std::milli> ms_double = stop - start;
-
-        outputFile << "ARVORE B "<< endl;
-        outputFile << endl;
-        outputFile << "Numero de registros aleatorios inseridos: " << tam << endl;
-        outputFile << "Comparacoes durante as insercoes: " << analyticsForInsert.getComparisons() << endl;
-        outputFile << "Tempo durante as insercoes: " << ms_double.count() << " ms" << endl;
-
-        long int b;
-        cout << "Numero de registros aleatorios que a serem buscados:";
-        cin >> b;
-
-        if(b > tam){
-            cout << "Numero de buscas maior que o numero de registros lidos" << endl;
-            exit(1);
-        }
-
-        start = chrono::high_resolution_clock::now();
-
-        for (int i = 0; i < b; i++)
-        {
-            long int result = 1 + (rand() % (3000000 - 1));
-            long int pos = (result - 1) * sizeof(Review);
-            inputFile.seekg(pos);
-            inputFile.read(reinterpret_cast<char *>(&review2), sizeof(Review));
-
-            tree.search(review2.getReview_id(), &analyticsForSearch);
-        }
-
-        tree.search("7ncisnbi4298", &analyticsForSearch);
-
-        stop = chrono::high_resolution_clock::now();
-        ms_double = stop - start;
-
-        outputFile << endl;
-        outputFile << "Numero de registros aleatorios buscados: " << b << endl;
-        outputFile << "Comparacoes durante as buscas: " << analyticsForSearch.getComparisons() << endl;
-        outputFile << "Tempo durante as buscas: " << ms_double.count() << " ms" << endl;
-
-        cout << "As analises foram feitas com sucesso, e voce pode consulta-las no arquivo saida.txt" << endl;
-
-        inputFile.close();
-        outputFile.close();
-        exit(0);
+        writeTxt(&randomReview);
     }
-
 }
 
 void File::heapSort(Review heapReview[], long int len, Analytics *analytics)
@@ -794,4 +691,145 @@ void File::runHash(long int n, int verificador)
 
     delete[] vetorReviews;
     inputFile.close();
+}
+
+void File::arvores(int i)
+{
+    ifstream inputFile("tiktok_app_reviews.bin", ios::in | ios::binary);
+    ofstream outputFile("saida.txt", std::ofstream::out | std::ofstream::app);
+
+    long int tam;
+    cout << "Numero de registros a considerar (Minimo: 1.000.000): ";
+    cin >> tam;
+    srand(time(0));
+
+    if (!inputFile.is_open())
+    {
+        cout << "Error: Could not open file" << endl;
+        exit(1);
+    }
+    inputFile.seekg(0, std::ios::end);
+
+    if (i == 1)
+    {
+        RBTree tree = RBTree();
+        Review review2;
+
+        for (int i = 0; i < tam; i++)
+        {
+            long int result = 1 + (rand() % (3000000 - 1));
+            long int pos = (result - 1) * sizeof(Review);
+            inputFile.seekg(pos);
+            inputFile.read(reinterpret_cast<char *>(&review2), sizeof(Review));
+
+            cout << "ID: " << review2.getReview_id() << endl;
+            cout << "Posicao:" << pos << endl;
+            cout << endl;
+            string a = (review2.getReview_id());
+
+            tree.insert(a, pos);
+        }
+        tree.printTree();
+    }
+
+    if (i == 2)
+    {
+        long int b;
+        cout << "Numero de registros aleatorios que a serem buscados (Minimo: 100): ";
+        cin >> b;
+
+        if (b > tam)
+        {
+            cout << "Numero de buscas maior que o numero de registros lidos" << endl;
+            exit(1);
+        }
+
+        outputFile << "ARVORE B" << endl;
+        outputFile << "Numero de registros a considerar: " << tam << endl;
+        outputFile << "Numero de buscas: " << b << endl;
+
+        int maxRepeat;
+        cout << "Numero de repetições (Minimo: 3): ";
+        cin >> maxRepeat;
+
+        treeBCaseFunction(inputFile, outputFile, tam, b, 20, 1, maxRepeat);
+    }
+}
+
+void File::treeBCaseFunction(ifstream &inputFile, ofstream &outputFile, long int tam, long int b, int order, int currentCicle, int maxRepeat)
+{
+    outputFile << endl;
+    outputFile << currentCicle << " - Ciclo - Ordem (" << order << ")" << endl;
+
+    TreeB tree = TreeB(order);
+    Review review2;
+    Analytics analyticsForInsert = Analytics();
+    Analytics analyticsForSearch = Analytics();
+
+    auto start = chrono::high_resolution_clock::now();
+
+    for (int i = 0; i < tam; i++)
+    {
+        long int result = 1 + (rand() % (tam - 1));
+        long int pos = (result - 1) * sizeof(Review);
+        inputFile.seekg(pos);
+        inputFile.read(reinterpret_cast<char *>(&review2), sizeof(Review));
+
+        KeyB noArvoreB;
+        noArvoreB.setPosition(result);
+        noArvoreB.setId(review2.getReview_id());
+
+        tree.insert(noArvoreB, &analyticsForInsert);
+    }
+
+    auto stop = chrono::high_resolution_clock::now();
+    chrono::duration<double, std::milli> ms_double = stop - start;
+
+    outputFile << "Comparacoes durante as insercoes: " << analyticsForInsert.getComparisons() << endl;
+    outputFile << "Tempo durante as insercoes: " << ms_double.count() << " ms" << endl;
+
+    start = chrono::high_resolution_clock::now();
+
+    for (int i = 0; i < b; i++)
+    {
+        long int result = 1 + (rand() % (b - 1));
+        long int pos = (result - 1) * sizeof(Review);
+        inputFile.seekg(pos);
+        inputFile.read(reinterpret_cast<char *>(&review2), sizeof(Review));
+
+        tree.search(review2.getReview_id(), &analyticsForSearch);
+    }
+
+    stop = chrono::high_resolution_clock::now();
+    ms_double = stop - start;
+
+    outputFile << endl;
+    outputFile << "Comparacoes durante as buscas: " << analyticsForSearch.getComparisons() << endl;
+    outputFile << "Tempo durante as buscas: " << ms_double.count() << " ms" << endl;
+
+    tree.~TreeB();
+
+    while (currentCicle < maxRepeat * 2)
+    {
+        if (currentCicle < maxRepeat)
+        {
+            treeBCaseFunction(inputFile, outputFile, tam, b, 20, currentCicle + 1, maxRepeat);
+        }
+        else
+        {
+            treeBCaseFunction(inputFile, outputFile, tam, b, 200, currentCicle + 1, maxRepeat);
+        }
+    }
+
+    if(currentCicle == maxRepeat * 2)
+    {
+        cout << "O arquivo saida.txt foi gerado com sucesso, e voce ja podera consultar as metricas" << endl;
+
+        outputFile << endl;
+        outputFile << "FIM" << endl;
+
+        inputFile.close();
+        outputFile.close();
+        exit(0);
+    }
 }

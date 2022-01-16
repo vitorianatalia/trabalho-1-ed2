@@ -14,6 +14,7 @@ private:
 
 public:
     KeyB(){};
+   
     ~KeyB(){};
 
     void setId(string id)

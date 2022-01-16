@@ -23,6 +23,11 @@ public:
         minDegree = t;
     }
 
+    ~TreeB()
+    {
+        delete root;
+    }
+
     void insert(KeyB no, Analytics *analytics)
     {
         if (root == NULL)

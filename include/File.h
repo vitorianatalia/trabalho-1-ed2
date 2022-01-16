@@ -21,7 +21,7 @@ public:
     void writeBin(vector<Review> *reviewList);
     void readBinary(vector<Review> *reviewList);
     void acessaRegistro(long int n);
-    void testeImportacao(int i);
+    void testeImportacao();
     void printConsole(vector<Review> *reviewList);
     void generateVector(long int n, int m, int algorithm);
     void heapSort(Review heapReview[], long int len, Analytics *analytics);
@@ -30,7 +30,9 @@ public:
     void quicksort(Review *reviews, int left, int right, Analytics *analytics);
     void testVector(int n, int m, int algorithm);
     void runHash(long int n, int verificador);
-    void countingSortInt(vector <int> *v, int n);
+    void countingSortInt(vector<int> *v, int n);
+    void arvores(int i);
+    void treeBCaseFunction(ifstream &inputFile, ofstream &outputFile, long int b, long int tam, int order, int currentCicle, int maxRepeat);
 };
 
 #endif

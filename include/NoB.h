@@ -29,6 +29,13 @@ public:
 		currentTotalNode = 0;
 	}
 
+	~NoB()
+	{
+
+		delete[] key;
+		delete[] children;
+	}
+
 	void splitChild(int i, NoB *node, Analytics *analytics)
 	{
 

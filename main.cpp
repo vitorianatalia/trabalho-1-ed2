@@ -41,7 +41,7 @@ void openFile(int i, string path)
         cout << "2 - Teste de versoes mais frequentes" << endl;
             file.runHash(100, 1);
         cout << "3 - Teste de importacao" << endl;
-            file.testeImportacao(i);
+            file.testeImportacao();
         break;
 
     case 3:
@@ -90,12 +90,8 @@ void openFile(int i, string path)
         cout << "3 - Sair" << endl;
         cin >> n;
         if (n == 1 || n == 2) {
-            file.testeImportacao(n);
+            file.arvores(n);
         }
-        break;
-    
-    case 5:
-        file.testeImportacao(i);
         break;
 
     default:
