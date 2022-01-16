@@ -4,6 +4,7 @@
 #include "Hash.h"
 #include "TreeB.h"
 #include "NoB.h"
+#include "RBTree.h"
 #include <fstream>
 #include <string>
 #include <iostream>
@@ -238,7 +239,6 @@ void File::testeImportacao(int i)
 
             cout << "ID: " << review2.getReview_id() << endl;
             cout << "Posicao:" << pos << endl;
-            cout << "Resultado:" << result << endl;
             cout << endl;
 
             treeExample.insert(i);
@@ -254,6 +254,28 @@ void File::testeImportacao(int i)
         (treeExample.search(k) != NULL) ? cout << "\nPresent" : cout << "\nNot Present";
 
         cout << endl;
+    }
+
+    if(i == 5) {
+        RBTree tree = RBTree();
+        Review review2;
+
+        for (int i = 0; i < tam; i++)
+        {
+            long int result = 1 + (rand() % (3000000 - 1));
+            long int pos = (result - 1) * sizeof(Review);
+            inputFile.seekg(pos);
+            inputFile.read(reinterpret_cast<char *>(&review2), sizeof(Review));
+
+            cout << "ID: " << review2.getReview_id() << endl;
+            cout << "Posicao:" << pos << endl;
+            cout << endl;
+            string a = (review2.getReview_id());
+            
+            tree.insert(a, pos);
+        }
+        tree.printTree();
+
     }
 }
 

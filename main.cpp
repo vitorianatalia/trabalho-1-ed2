@@ -8,8 +8,7 @@
 #include <algorithm>
 #include "TreeB.h"
 #include "NoB.h"
-#include "RBNode.h"
-#include "RBTree.h"
+
 
 using namespace std;
 
@@ -85,6 +84,10 @@ void openFile(int i, string path)
     case 4:
         file.testeImportacao(i);
         break;
+    
+    case 5:
+        file.testeImportacao(i);
+        break;
 
     default:
         break;
@@ -103,6 +106,7 @@ void menu(string path)
         cout << "2 - Hash" << endl;
         cout << "3 - Ordenacao" << endl;
         cout << "4 - Arvore B." << endl;
+        cout << "5 - Arvore Rubro-Negra" << endl;
         cout << "0 - Sair" << endl;
         cout << "========================================= " << endl;
 
@@ -116,6 +120,7 @@ void menu(string path)
         case 2:
         case 3:
         case 4:
+        case 5:
             openFile(i, path);
             break;
         default:
@@ -128,35 +133,9 @@ int main(int argc, char *argv[])
 {
     string path;
     path = argv[1];
-
-    //TreeB treeExample = TreeB(3);
-
-    /*
-    treeExample.insert(5);
-    treeExample.insert(2);
-    treeExample.insert(3);
-    treeExample.insert(1);
-    treeExample.insert(4);
-
-    treeExample.printTree();
-    */
     
     menu(path);
 
-    // RBTree tree = RBTree();
-    // string a = ("amanha vai chover"),
-    //    b = ("bolacha nao eh biscoito"),
-    //    c = ("catarro verde"),
-    //    d = ("dipirona");
-    // tree.insert(a);
-    // tree.insert(b);
-    // tree.insert(c);
-    // tree.insert(d);
-
-    // tree.printTree();
-  
-    cout << endl;
-    cout << endl;
 
     cout << "Programa encerrado" << endl;
     return 0;
