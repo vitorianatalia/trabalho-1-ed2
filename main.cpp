@@ -89,6 +89,7 @@ void openFile(int i, string path)
         cout << "2 - Arvore B." << endl;
         cout << "3 - Sair" << endl;
         cin >> n;
+        cout << endl;
         if (n == 1 || n == 2) {
             file.arvores(n);
         }
