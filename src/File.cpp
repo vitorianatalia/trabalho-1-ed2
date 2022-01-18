@@ -705,35 +705,32 @@ void File::arvores(int i)
     }
     inputFile.seekg(0, std::ios::end);
 
-                    
     long int tam;
     cout << "Numero de registros a considerar (Minimo: 1.000.000): ";
     cin >> tam;
     srand(time(0));
 
-
     if (i == 1)
     {
+        long int b;
+        cout << "Numero de registros aleatorios que a serem buscados (Minimo: 100): ";
+        cin >> b;
 
-        RBTree tree = RBTree();
-        Review review2;
-
-        for (int i = 0; i < tam; i++)
+        if (b > tam)
         {
-            long int result = 1 + (rand() % (3000000 - 1));
-            long int pos = (result - 1) * sizeof(Review);
-            inputFile.seekg(pos);
-            inputFile.read(reinterpret_cast<char *>(&review2), sizeof(Review));
-
-            cout << "ID: " << review2.getReview_id() << endl;
-            cout << "Posicao:" << pos << endl;
-            cout << endl;
-            string a = (review2.getReview_id());
-
-            tree.insert(a, pos);
+            cout << "Numero de buscas maior que o numero de registros lidos" << endl;
+            exit(1);
         }
-        
-        tree.printTree();
+
+        outputFile << "ARVORE Rubro Negra" << endl;
+        outputFile << "Numero de registros a considerar: " << tam << endl;
+        outputFile << "Numero de buscas: " << b << endl;
+
+        int maxRepeat;
+        cout << "Numero de repetições (Minimo: 3): ";
+        cin >> maxRepeat;
+
+        treeRBCaseFunction(inputFile, outputFile, tam, b, 1, maxRepeat);
     }
 
     if (i == 2)
@@ -757,7 +754,8 @@ void File::arvores(int i)
         case 1:
 
             long int b;
-            cout << endl << "Numero de registros aleatorios a serem buscados (Minimo: 100): ";
+            cout << endl
+                 << "Numero de registros aleatorios a serem buscados (Minimo: 100): ";
             cin >> b;
             cout << endl;
 
@@ -767,7 +765,7 @@ void File::arvores(int i)
                 exit(1);
             }
 
-            outputFile << "ARVORE B" << endl;
+            outputFile << "ARVORE Rubro Negra" << endl;
             outputFile << "Numero de registros a considerar: " << tam << endl;
             outputFile << "Numero de buscas: " << b << endl;
 
@@ -787,17 +785,16 @@ void File::arvores(int i)
             treeBCaseFunction(inputFile, outputFile, tam, b, ord, 0, maxRepeat, 0, 0, 0, 0, 1, idS);
 
             break;
-        
+
         default:
             break;
-        
         }
     }
 }
 
 void File::treeBCaseFunction(ifstream &inputFile, ofstream &outputFile, long int tam, long int b, int order, int currentCicle, int maxRepeat, float comparacaoI, float comparacaoB, float tempoI, float tempoB, int searchId, string idS)
 {
-    if(!searchId)
+    if (!searchId)
     {
         outputFile << endl;
         outputFile << currentCicle << " - Ciclo - Ordem (" << order << ")" << endl;
@@ -824,11 +821,9 @@ void File::treeBCaseFunction(ifstream &inputFile, ofstream &outputFile, long int
         tree.insert(noArvoreB, &analyticsForInsert);
     }
 
-    if(searchId)
+    if (searchId)
     {
-        (tree.search(idS, &analyticsForSearch) != NULL) ?
-        cout << "O ID esta presente na arvore" << endl :
-        cout << "O ID nao esta presente na arvore" << endl ;
+        (tree.search(idS, &analyticsForSearch) != NULL) ? cout << "O ID esta presente na arvore" << endl : cout << "O ID nao esta presente na arvore" << endl;
     }
     else
     {
@@ -867,10 +862,10 @@ void File::treeBCaseFunction(ifstream &inputFile, ofstream &outputFile, long int
         if (currentCicle == maxRepeat)
         {
             outputFile << endl;
-            outputFile << "Media de comparacoes durante as insercoes: " << comparacaoI/maxRepeat << endl;
-            outputFile << "Media de tempo durante as insercoes: " << tempoI/maxRepeat << " ms" << endl;
-            outputFile << "Media de comparacoes durante as buscas: " << comparacaoB/maxRepeat << endl;
-            outputFile << "Media de tempo durante as buscas: " << tempoB/maxRepeat << " ms" << endl;
+            outputFile << "Media de comparacoes durante as insercoes: " << comparacaoI / maxRepeat << endl;
+            outputFile << "Media de tempo durante as insercoes: " << tempoI / maxRepeat << " ms" << endl;
+            outputFile << "Media de comparacoes durante as buscas: " << comparacaoB / maxRepeat << endl;
+            outputFile << "Media de tempo durante as buscas: " << tempoB / maxRepeat << " ms" << endl;
             outputFile << endl;
             outputFile << "/////////////////////////////////////////////////" << endl;
 
@@ -892,16 +887,9 @@ void File::treeBCaseFunction(ifstream &inputFile, ofstream &outputFile, long int
             }
         }
 
-        if(currentCicle == maxRepeat * 2)
+        if (currentCicle == maxRepeat * 2)
         {
             outputFile << endl;
-            outputFile << "Media de comparacoes durante as insercoes: " << comparacaoI/maxRepeat << endl;
-            outputFile << "Media de tempo durante as insercoes: " << tempoI/maxRepeat << " ms" << endl;
-            outputFile << "Media de comparacoes durante as buscas: " << comparacaoB/maxRepeat << endl;
-            outputFile << "Media de tempo durante as buscas: " << tempoB/maxRepeat << " ms" << endl;
-            outputFile << endl;
-            outputFile << "/////////////////////////////////////////////////" << endl;
-
             cout << "O arquivo saida.txt foi gerado com sucesso, e voce ja podera consultar as metricas" << endl;
 
             outputFile << endl;
@@ -911,5 +899,73 @@ void File::treeBCaseFunction(ifstream &inputFile, ofstream &outputFile, long int
             outputFile.close();
             exit(0);
         }
+    }
+}
+void File::treeRBCaseFunction(ifstream &inputFile, ofstream &outputFile, long int tam, long int b, int currentCicle, int maxRepeat)
+{
+    outputFile << endl;
+
+    RBTree tree = RBTree();
+    Review review2;
+    Analytics analyticsForInsert = Analytics();
+    Analytics analyticsForSearch = Analytics();
+
+    auto start = chrono::high_resolution_clock::now();
+    for (int i = 0; i < tam; i++)
+    {
+        long int result = 1 + (rand() % (3000000 - 1));
+        long int pos = (result - 1) * sizeof(Review);
+        inputFile.seekg(pos);
+        inputFile.read(reinterpret_cast<char *>(&review2), sizeof(Review));
+
+        // cout << "ID: " << review2.getReview_id() << endl;
+        // cout << "Posicao:" << pos << endl;
+        // cout << endl;
+        string a = (review2.getReview_id());
+        tree.insert(a, pos);
+    }
+    auto stop = chrono::high_resolution_clock::now();
+    chrono::duration<double, std::milli> ms_double = stop - start;
+
+    outputFile << "Comparacoes durante as insercoes: " << analyticsForInsert.getComparisons() << endl;
+    outputFile << "Tempo durante as insercoes: " << ms_double.count() << " ms" << endl;
+
+    start = chrono::high_resolution_clock::now();
+
+    for (int i = 0; i < b; i++)
+    {
+
+        long int result = 1 + (rand() % (b - 1));
+        long int pos = (result - 1) * sizeof(Review);
+        inputFile.seekg(pos);
+        inputFile.read(reinterpret_cast<char *>(&review2), sizeof(Review));
+
+        tree.search(review2.getReview_id(), &analyticsForSearch);
+    }
+
+    stop = chrono::high_resolution_clock::now();
+    ms_double = stop - start;
+
+    outputFile << endl;
+    outputFile << "Comparacoes durante as buscas: " << analyticsForSearch.getComparisons() << endl;
+    outputFile << "Tempo durante as buscas: " << ms_double.count() << " ms" << endl;
+
+    tree.~RBTree();
+
+    while (currentCicle < maxRepeat)
+    {
+        treeRBCaseFunction(inputFile, outputFile, tam, b, currentCicle + 1, maxRepeat);
+    }
+
+    if (currentCicle == maxRepeat)
+    {
+        cout << "O arquivo saida.txt foi gerado com sucesso, e voce ja podera consultar as metricas" << endl;
+
+        outputFile << endl;
+        outputFile << "FIM" << endl;
+
+        inputFile.close();
+        outputFile.close();
+        exit(0);
     }
 }
