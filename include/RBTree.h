@@ -36,8 +36,8 @@ private:
 public:
     RBTree() { root = NULL; };
     ~RBTree() { delete root;};
-    void insert(string &data, long int n);
-    Node *auxInsert(Node *root, Node *pt);
+    void insert(string &data, long int n, Analytics *analytics);
+    Node *auxInsert(Node *root, Node *pt, Analytics *analytics);
     void fixRules(Node *&, Node *&);
     void rotateLeft(Node *&, Node *&);
     void rotateRight(Node *&, Node *&);
@@ -45,10 +45,7 @@ public:
     void printHelper(Node *root, string indent, bool last);
     Node *search(string searchKey, Analytics *analytics)
     {
-        cout << "aqui" << endl;
         return searchAux(this->root, searchKey, analytics);
-        cout << "ali" << endl;
-
     }
     Node *searchAux(Node *n,string searchKey, Analytics *analytics)
     {
@@ -79,12 +76,12 @@ Node *RBTree::auxInsert(Node *root, Node *pt, Analytics *analytics)
         return pt;
     if (pt->data < root->data)
     {
-        root->left = auxInsert(root->left, pt);
+        root->left = auxInsert(root->left, pt, analytics);
         root->left->parent = root;
     }
     else if (pt->data > root->data)
     {
-        root->right = auxInsert(root->right, pt);
+        root->right = auxInsert(root->right, pt, analytics);
         root->right->parent = root;
     }
     analytics->addComparisons();

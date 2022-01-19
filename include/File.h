@@ -32,8 +32,8 @@ public:
     void runHash(long int n, int verificador);
     void countingSortInt(vector<int> *v, int n);
     void arvores(int i);
-    void treeBCaseFunction(ifstream &inputFile, ofstream &outputFile, long int b, long int tam, int order, int currentCicle, int maxRepeat, float comparacaoI, float comparacaoB, float tempoI, float tempoB, int searchId, string idS);
-    void treeRBCaseFunction(ifstream &inputFile, ofstream &outputFile, long int b, long int tam, int currentCicle, int maxRepeat);
+    void treeBCaseFunction(ifstream &inputFile, ofstream &outputFile, long int b, long int tam, int order, int currentCicle, int maxRepeat, long int comparacaoI, float comparacaoB, float tempoI, float tempoB, int searchId, string idS);
+    void treeRBCaseFunction(ifstream &inputFile, ofstream &outputFile, long int b, long int tam, int currentCicle, int maxRepeat, string idS);
 };
 
 #endif
