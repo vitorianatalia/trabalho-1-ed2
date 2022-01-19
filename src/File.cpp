@@ -842,7 +842,7 @@ void File::treeBCaseFunction(ifstream &inputFile, ofstream &outputFile, long int
         inputFile.read(reinterpret_cast<char *>(&review2), sizeof(Review));
 
         KeyB noArvoreB;
-        noArvoreB.setPosition(result);
+        noArvoreB.setPosition(pos);
         noArvoreB.setId(review2.getReview_id());
 
         tree.insert(noArvoreB, &analyticsForInsert);
