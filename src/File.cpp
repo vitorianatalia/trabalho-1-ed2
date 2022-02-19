@@ -6,6 +6,7 @@
 #include "KeyB.h"
 #include "NoB.h"
 #include "RBTree.h"
+#include "Huffman.h"
 #include <fstream>
 #include <string>
 #include <iostream>
@@ -725,7 +726,7 @@ void File::arvores(int i)
         switch (n)
         {
         case 1:
-        
+
             long int b;
             cout << "Numero de registros aleatorios que a serem buscados (Minimo: 100): ";
             cin >> b;
@@ -850,9 +851,7 @@ void File::treeBCaseFunction(ifstream &inputFile, ofstream &outputFile, long int
 
     if (searchId)
     {
-        (tree.search(idS, &analyticsForSearch) != NULL) ? 
-        cout << "O ID esta presente na arvore" << endl : 
-        cout << "O ID nao esta presente na arvore" << endl;
+        (tree.search(idS, &analyticsForSearch) != NULL) ? cout << "O ID esta presente na arvore" << endl : cout << "O ID nao esta presente na arvore" << endl;
         exit(0);
     }
     else
@@ -921,10 +920,10 @@ void File::treeBCaseFunction(ifstream &inputFile, ofstream &outputFile, long int
         {
             outputFile << endl;
             outputFile << endl;
-            outputFile << "Media de comparacoes durante as insercoes: " << comparacaoI/maxRepeat << endl;
-            outputFile << "Media de tempo durante as insercoes: " << tempoI/maxRepeat << " ms" << endl;
-            outputFile << "Media de comparacoes durante as buscas: " << comparacaoB/maxRepeat << endl;
-            outputFile << "Media de tempo durante as buscas: " << tempoB/maxRepeat << " ms" << endl;
+            outputFile << "Media de comparacoes durante as insercoes: " << comparacaoI / maxRepeat << endl;
+            outputFile << "Media de tempo durante as insercoes: " << tempoI / maxRepeat << " ms" << endl;
+            outputFile << "Media de comparacoes durante as buscas: " << comparacaoB / maxRepeat << endl;
+            outputFile << "Media de tempo durante as buscas: " << tempoB / maxRepeat << " ms" << endl;
             outputFile << endl;
             outputFile << "/////////////////////////////////////////////////" << endl;
 
@@ -993,7 +992,7 @@ void File::treeRBCaseFunction(ifstream &inputFile, ofstream &outputFile, long in
     }
 
     if (currentCicle == maxRepeat)
-    {   
+    {
         cout << "O arquivo saida.txt foi gerado com sucesso, e voce ja podera consultar as metricas" << endl;
 
         outputFile << endl;
@@ -1003,4 +1002,45 @@ void File::treeRBCaseFunction(ifstream &inputFile, ofstream &outputFile, long in
         outputFile.close();
         exit(0);
     }
+}
+
+void File::generateTxtHuffman(int n)
+{
+    ifstream inputFile("tiktok_app_reviews.bin", ios::in | ios::binary);
+
+    string txt = "";
+
+    long int tam;
+
+    if (n == 1)
+    {
+        cout << "Numero de registros a considerar: ";
+        cin >> tam;
+        srand(time(0));
+
+        if (!inputFile.is_open())
+        {
+            cout << "Error: Could not open file" << endl;
+            exit(1);
+        }
+
+        inputFile.seekg(0, std::ios::end);
+
+        Review review2;
+        for (int i = 0; i < tam; i++)
+        {
+            long int result = 1 + (rand() % (tam - 1));
+            long int pos = (result - 1) * sizeof(Review);
+            cout << result << endl;
+            inputFile.seekg(pos);
+            inputFile.read(reinterpret_cast<char *>(&review2), sizeof(Review));
+            txt += review2.getReview_text();
+        }
+    }
+
+    Huffman huffman = Huffman();
+
+    huffman.buildHuffmanTree("Oi Allan teste De novo pra ver se funciona", n);
+
+    return;
 }

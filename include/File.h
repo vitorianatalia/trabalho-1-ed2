@@ -34,6 +34,7 @@ public:
     void arvores(int i);
     void treeBCaseFunction(ifstream &inputFile, ofstream &outputFile, long int b, long int tam, int order, int currentCicle, int maxRepeat, long int comparacaoI, float comparacaoB, float tempoI, float tempoB, int searchId, string idS);
     void treeRBCaseFunction(ifstream &inputFile, ofstream &outputFile, long int b, long int tam, int currentCicle, int maxRepeat, string idS);
+    void generateTxtHuffman(int n);
 };
 
 #endif

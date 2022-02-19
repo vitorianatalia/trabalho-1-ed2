@@ -9,7 +9,6 @@
 #include "TreeB.h"
 #include "NoB.h"
 
-
 using namespace std;
 
 void openFile(int i, string path)
@@ -21,11 +20,11 @@ void openFile(int i, string path)
     file.writeBin(&review);
 
     long int n;
-    
+
     switch (i)
     {
-    case 1:     
-                   
+    case 1:
+
         cout << endl;
         cout << "Quantidade de registros a considerar: ";
         cin >> n;
@@ -39,9 +38,9 @@ void openFile(int i, string path)
         for (int j = 1; j < 4; j++)
             file.testVector(100, 3, j);
         cout << "2 - Teste de versoes mais frequentes" << endl;
-            file.runHash(100, 1);
+        file.runHash(100, 1);
         cout << "3 - Teste de importacao" << endl;
-            file.testeImportacao();
+        file.testeImportacao();
         break;
 
     case 3:
@@ -75,8 +74,8 @@ void openFile(int i, string path)
         }
 
         n = n == 1 ? 10000 : n == 2 ? 50000
-                           : n == 3   ? 100000
-                           : n == 4   ? 500000
+                         : n == 3   ? 100000
+                         : n == 4   ? 500000
                                     : 1000000;
 
         file.generateVector(n, m, algorithm);
@@ -90,11 +89,20 @@ void openFile(int i, string path)
         cout << "3 - Sair" << endl;
         cin >> n;
         cout << endl;
-        if (n == 1 || n == 2) {
+        if (n == 1 || n == 2)
+        {
             file.arvores(n);
         }
         break;
 
+    case 5:
+
+        cout << "1 - Comprimir um conjunto de dados e salvar em binario" << endl;
+        cout << "2 - Descomprimir um conjunto de dados e salvar em txt" << endl;
+        cin >> n;
+
+        file.generateTxtHuffman(n);
+        break;
     default:
         break;
     }
@@ -112,6 +120,7 @@ void menu(string path)
         cout << "2 - Modulo de Teste" << endl;
         cout << "3 - Ordenacao" << endl;
         cout << "4 - Arvores" << endl;
+        cout << "5 - Huffman" << endl;
         cout << "0 - Sair" << endl;
         cout << "========================================= " << endl;
 
@@ -125,6 +134,7 @@ void menu(string path)
         case 2:
         case 3:
         case 4:
+        case 5:
             openFile(i, path);
             break;
         default:
@@ -137,7 +147,7 @@ int main(int argc, char *argv[])
 {
     string path;
     path = argv[1];
-    
+
     menu(path);
 
     cout << "Programa encerrado" << endl;
