@@ -99,9 +99,26 @@ void openFile(int i, string path)
 
         cout << "1 - Comprimir um conjunto de dados e salvar no arquivo reviewsComp" << endl;
         cout << "2 - Descomprimir um conjunto de dados e salvar no arquivo reviewsOrig" << endl;
+        cout << "3 - Executar uma sequencia de compressoes de N (usar os valores 10.000, 100.000 e 1.000.000) reviews_texts aleatorios" << endl;
         cin >> n;
 
-        file.generateTxtHuffman(n);
+        if (n == 3)
+        {
+            int auxN;
+
+            cout << "1 - 10.000" << endl;
+            cout << "2 - 100.000" << endl;
+            cout << "3 - 1.000.000" << endl;
+
+            cin >> auxN;
+
+            auxN = auxN == 1 ? 10000 : auxN == 2 ? 100000
+                                                 : 1000000;
+
+            file.generateTxtHuffman(n, auxN);
+        }
+        else
+            file.generateTxtHuffman(n, -1);
         break;
     default:
         break;

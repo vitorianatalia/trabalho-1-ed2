@@ -1004,43 +1004,86 @@ void File::treeRBCaseFunction(ifstream &inputFile, ofstream &outputFile, long in
     }
 }
 
-void File::generateTxtHuffman(int n)
+void File::generateTxtHuffman(int n, int fixedTam)
 {
     ifstream inputFile("tiktok_app_reviews.bin", ios::in | ios::binary);
 
     string txt = "";
 
     long int tam;
+    int repetitions = 1;
 
-    if (n == 1)
+    if (fixedTam > 0)
+    {
+        tam = fixedTam;
+        cout << "Quantas vezes voce quer rodar o ciclo (minimo 3): ";
+        cin >> repetitions;
+    }
+    else if (n == 1)
     {
         cout << "Numero de registros a considerar: ";
         cin >> tam;
-        srand(time(0));
-
-        if (!inputFile.is_open())
-        {
-            cout << "Error: Could not open file" << endl;
-            exit(1);
-        }
-
-        inputFile.seekg(0, std::ios::end);
-
-        Review review2;
-        for (int i = 0; i < tam; i++)
-        {
-            long int result = 1 + (rand() % (3660724 - 1));
-            long int pos = (result - 1) * sizeof(Review);
-            cout << result << endl;
-            inputFile.seekg(pos);
-            inputFile.read(reinterpret_cast<char *>(&review2), sizeof(Review));
-            txt += review2.getReview_text();
-        }
     }
 
-    Huffman huffman = Huffman();
+    Huffman huffmanDecomp = Huffman();
+    Analytics analyticsDecomp = Analytics();
 
-    huffman.buildHuffmanTree("Se imprimir isso é pq funcionou", n);
+    if (n == 1 || n == 3)
+    {
+        int totalComparacoes = 0;
+        long int inputBytesSum = 0;
+        long int outputBytesSum = 0;
+
+        for (int i = 0; i < repetitions; i++)
+        {
+            Analytics analytics = Analytics();
+            Huffman huffmanComp = Huffman();
+
+            srand(time(0));
+
+            if (!inputFile.is_open())
+            {
+                cout << "Error: Could not open file" << endl;
+                exit(1);
+            }
+
+            inputFile.seekg(0, std::ios::end);
+
+            Review reviewAux;
+            for (int i = 0; i < tam; i++)
+            {
+                long int result = 1 + (rand() % (3660724 - 1));
+                long int pos = (result - 1) * sizeof(Review);
+                inputFile.seekg(pos);
+                inputFile.read(reinterpret_cast<char *>(&reviewAux), sizeof(Review));
+                txt += reviewAux.getReview_text();
+            }
+
+            huffmanComp.buildHuffmanTree(txt, n, &analytics, i);
+
+            totalComparacoes += analytics.getComparisons();
+            inputBytesSum += analytics.getInputBytes();
+            outputBytesSum += analytics.getoutputBytes();
+        }
+
+        if (n == 3)
+        {
+            ifstream inputFile("reviewsComp.bin", ios::in | ios::binary);
+            ofstream outputFile("saida.txt", std::ofstream::out | std::ofstream::app);
+
+            inputFile.seekg(0, ios::end);
+            int file_size = inputFile.tellg();
+
+            float media = totalComparacoes / repetitions;
+
+            outputFile << endl << endl << "Media de comparacoes: " << media << endl;
+            outputFile << "Media da taxa de compressao: " << (((double)inputBytesSum - outputBytesSum) / inputBytesSum) * 100 << "%" << endl;
+        }
+    }
+    else
+    {
+        huffmanDecomp.buildHuffmanTree(txt, n, &analyticsDecomp, 1);
+    }
 
     return;
 }

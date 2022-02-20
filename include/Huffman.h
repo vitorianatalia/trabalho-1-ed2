@@ -1,6 +1,7 @@
 #ifndef HUFFMAN_H_INCLUDED
 #define HUFFMAN_H_INCLUDED
 
+#include "Analytics.h"
 #include <string>
 #include <iostream>
 
@@ -15,7 +16,7 @@ public:
     Huffman(){};
     ~Huffman(){};
 
-    void buildHuffmanTree(string txt, int n);
+    void buildHuffmanTree(string txt, int n, Analytics *analytics, int cycle);
 };
 
 #endif // HUFFMAN_H_INCLUDED

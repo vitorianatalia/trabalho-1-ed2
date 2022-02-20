@@ -11,6 +11,8 @@ private:
     int swaps;
     int timeInit;
     int timeEnd;
+    long int inputBytes;
+    long int outputBytes;
 
 public:
     Analytics()
@@ -19,6 +21,8 @@ public:
         swaps = 0;
         timeInit = 0;
         timeEnd = 0;
+        inputBytes = 0;
+        outputBytes = 0;
     }
 
     ~Analytics()
@@ -27,7 +31,30 @@ public:
         swaps = 0;
         timeInit = 0;
         timeEnd = 0;
+        inputBytes = 0;
+        outputBytes = 0;
     }
+
+    void addInputBytes(long int bytes)
+    {
+        inputBytes += bytes;
+    }
+
+    long int getInputBytes()
+    {
+        return inputBytes;
+    }
+
+    void addOutputBytes(long int bytes)
+    {
+        outputBytes += bytes;
+    }
+
+    long int getoutputBytes()
+    {
+        return outputBytes;
+    }
+
 
     void addSwaps()
     {

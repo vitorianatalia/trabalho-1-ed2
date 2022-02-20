@@ -1,13 +1,15 @@
 
 #include "Huffman.h"
+#include "Analytics.h"
 #include <iostream>
 #include <string>
 #include <queue>
 #include <unordered_map>
 #include <fstream>
+#include <sstream>
+
 using namespace std;
 
-// A Tree node
 struct HuffmanNo
 {
 	char reviewsText;
@@ -15,7 +17,14 @@ struct HuffmanNo
 	HuffmanNo *left, *right;
 };
 
-// Function to allocate a new tree node
+struct comparison
+{
+	bool operator()(HuffmanNo *lft, HuffmanNo *rgt)
+	{
+		return lft->frequency > rgt->frequency;
+	}
+};
+
 HuffmanNo *getHuffmanNo(char reviewsText, int frequency, HuffmanNo *left, HuffmanNo *right)
 {
 	HuffmanNo *no = new HuffmanNo();
@@ -28,34 +37,24 @@ HuffmanNo *getHuffmanNo(char reviewsText, int frequency, HuffmanNo *left, Huffma
 	return no;
 }
 
-// Comparison object to be used to order the heap
-struct comparison
-{
-	bool operator()(HuffmanNo *lft, HuffmanNo *rgt)
-	{
-		// highest priority item has lowest frequencyuency
-		return lft->frequency > rgt->frequency;
-	}
-};
 
-// traverse the Huffman Tree and store Huffman Codes
-// in a map.
-void encode(HuffmanNo *rt, string str, unordered_map<char, string> &hfCode)
+void encode(HuffmanNo *rt, string str, unordered_map<char, string> &hfCode, Analytics *analytics)
 {
+
+	analytics->addComparisons();
+
 	if (rt == nullptr)
 		return;
 
-	// found a leaf node
 	if (!rt->left && !rt->right)
 	{
 		hfCode[rt->reviewsText] = str;
 	}
 
-	encode(rt->left, str + "0", hfCode);
-	encode(rt->right, str + "1", hfCode);
+	encode(rt->left, str + "0", hfCode, analytics);
+	encode(rt->right, str + "1", hfCode, analytics);
 }
 
-// traverse the Huffman Tree and decode the encoded string
 void decode(HuffmanNo *rt, int &idx, string str)
 {
 	ofstream outputFile("reviewsOrig.bin", ios::out | ios::app | ios::binary);
@@ -66,11 +65,9 @@ void decode(HuffmanNo *rt, int &idx, string str)
 		return;
 	}
 
-	// found a leaf node
 	if (!rt->left && !rt->right)
 	{
 		outputFile << rt->reviewsText;
-		//cout << rt->reviewsText;
 		return;
 	}
 
@@ -82,12 +79,86 @@ void decode(HuffmanNo *rt, int &idx, string str)
 		decode(rt->right, idx, str);
 }
 
-// Builds Huffman Tree and decode given input text
-void run(string txtParam, int n)
+void decompression(string txtParam, int n)
+{
+	string filename = "temp.txt";
+
+	ifstream inputFile("reviewsComp.bin", ios::binary);
+	ifstream arq(filename, ios::in);
+
+	string txt = txtParam;
+
+	if (arq.is_open())
+	{
+		while (!arq.eof())
+		{
+			getline(arq, txt);
+		}
+		arq.close();
+	}
+
+	unordered_map<char, int> frequency;
+	for (char reviewsText : txt)
+	{
+		frequency[reviewsText]++;
+	}
+
+	priority_queue<HuffmanNo *, vector<HuffmanNo *>, comparison> prioQueue;
+
+	for (auto pair : frequency)
+	{
+		prioQueue.push(getHuffmanNo(pair.first, pair.second, nullptr, nullptr));
+	}
+
+	while (prioQueue.size() != 1)
+	{
+		HuffmanNo *left = prioQueue.top();
+		prioQueue.pop();
+		HuffmanNo *right = prioQueue.top();
+		prioQueue.pop();
+
+		int sum = left->frequency + right->frequency;
+		prioQueue.push(getHuffmanNo('\0', sum, left, right));
+	}
+
+	HuffmanNo *rt = prioQueue.top();
+
+	unordered_map<char, string> hfCode;
+
+	string str = "";
+
+	inputFile.seekg(0, inputFile.end);
+	int length = inputFile.tellg();
+	inputFile.seekg(0, inputFile.beg);
+	char *buffer = new char[length];
+	inputFile.read(buffer, length);
+	str = string(buffer, length);
+	delete[] buffer;
+
+	int idx = -1;
+	while (idx < (int)str.size() - 2)
+	{
+		decode(rt, idx, str);
+	}
+}
+
+void auxTest(string path, string bin)
+{
+	ofstream arq;
+	arq.open(path, ios::binary);
+
+	arq << bin;
+	arq.close();
+}
+
+long int compression(string txtParam, int n, Analytics *analytics)
 {
 	ofstream outputFile("reviewsComp.bin", ios::out | ios::trunc | ios::binary);
+	ofstream outputFile2("temp.txt", ios::out | ios::trunc);
 
 	string txt = txtParam;
+
+	outputFile2 << txt;
 
 	unordered_map<char, int> frequency;
 	for (char reviewsText : txt)
@@ -95,109 +166,65 @@ void run(string txtParam, int n)
 		frequency[reviewsText]++;
 	}
 
-	priority_queue<HuffmanNo *, vector<HuffmanNo *>, comparison> pq;
+	priority_queue<HuffmanNo *, vector<HuffmanNo *>, comparison> prioQueue;
 
 	for (auto pair : frequency)
 	{
-		pq.push(getHuffmanNo(pair.first, pair.second, nullptr, nullptr));
+		prioQueue.push(getHuffmanNo(pair.first, pair.second, nullptr, nullptr));
 	}
 
-	while (pq.size() != 1)
+	while (prioQueue.size() != 1)
 	{
-		HuffmanNo *left = pq.top();
-		pq.pop();
-		HuffmanNo *right = pq.top();
-		pq.pop();
+		HuffmanNo *left = prioQueue.top();
+		prioQueue.pop();
+		HuffmanNo *right = prioQueue.top();
+		prioQueue.pop();
 
 		int sum = left->frequency + right->frequency;
-		pq.push(getHuffmanNo('\0', sum, left, right));
+		prioQueue.push(getHuffmanNo('\0', sum, left, right));
 	}
 
-	HuffmanNo *rt = pq.top();
+	HuffmanNo *rt = prioQueue.top();
 
 	unordered_map<char, string> hfCode;
-	encode(rt, "", hfCode);
+	encode(rt, "", hfCode, analytics);
 
 	string str = "";
 
-	
-		for (char ch : txt)
-		{
-			str += hfCode[ch];
-		}
-	
+	for (char ch : txt)
+	{
+		str += hfCode[ch];
+	}
 
-	
-		// write str in binary file
-		outputFile.write(str.c_str(), str.length());
+	outputFile.write(str.c_str(), str.length());
 
-		// outputFile.write((char *)&str, sizeof(str));
-
-		cout << "Foi gerado o arquivo reviewsComp binario com sucesso!" << endl;
-	
+	return str.size() / 8;
 }
 
-void run2(string txtParam, int n)
+void Huffman::buildHuffmanTree(string text, int n, Analytics *analytics, int cycle)
 {
-	ifstream inputFile("reviewsComp.bin", ios::in | ios::binary);
-
-	string txt = txtParam;
-
-	unordered_map<char, int> frequency;
-	for (char reviewsText : txt)
+	if (n == 1 || n == 3)
 	{
-		frequency[reviewsText]++;
-	}
 
-	priority_queue<HuffmanNo *, vector<HuffmanNo *>, comparison> pq;
+		long int bytesOutput = compression(text, n, analytics);
 
-	for (auto pair : frequency)
-	{
-		pq.push(getHuffmanNo(pair.first, pair.second, nullptr, nullptr));
-	}
+		analytics->addInputBytes(text.size());
+		analytics->addOutputBytes(bytesOutput);
 
-	while (pq.size() != 1)
-	{
-		HuffmanNo *left = pq.top();
-		pq.pop();
-		HuffmanNo *right = pq.top();
-		pq.pop();
-
-		int sum = left->frequency + right->frequency;
-		pq.push(getHuffmanNo('\0', sum, left, right));
-	}
-
-	HuffmanNo *rt = pq.top();
-
-	unordered_map<char, string> hfCode;
-	encode(rt, "", hfCode);
-
-	string str = "";
-
-	
-		inputFile.seekg(0, inputFile.end);
-		int length = inputFile.tellg();
-		inputFile.seekg(0, inputFile.beg);
-		char *buffer = new char[length];
-		inputFile.read(buffer, length);
-		str = string(buffer, length);
-		delete[] buffer;
-	
-
-		int idx = -1;
-		while (idx < (int)str.size() - 2)
+		if (n == 3)
 		{
-			decode(rt, idx, str);
-		}
-}
+			ofstream outputFile("saida.txt", std::ofstream::out | std::ofstream::app);
 
-void Huffman::buildHuffmanTree(string text, int n)
-{
-	if(n==1){
-		run(text, n);
+			outputFile << cycle + 1 << " Compressao" << endl;
+			outputFile << "total de comparacoes no ciclo " << cycle + 1 << ": " << analytics->getComparisons() << endl;
+			outputFile << "total de bytes de entrada " << text.size() << endl;
+			outputFile << "total de bytes de saida " << bytesOutput << endl;
+			outputFile << "taxa de compressao " << (((double)text.size() - bytesOutput) / text.size()) * 100 << "%"<< endl;
+		}
 	}
-	
-	if(n==2){
-		run2(text, n);
-	}	
+
+	if (n == 2)
+	{
+		decompression(text, n);
+	}
 }
