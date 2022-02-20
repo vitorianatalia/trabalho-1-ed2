@@ -58,6 +58,9 @@ void encode(HuffmanNo *rt, string str, unordered_map<char, string> &hfCode)
 // traverse the Huffman Tree and decode the encoded string
 void decode(HuffmanNo *rt, int &idx, string str)
 {
+	ofstream outputFile("reviewsOrig.bin", ios::out | ios::app | ios::binary);
+	ifstream inputFile("reviewsOrig.bin", ios::in | ios::binary);
+
 	if (rt == nullptr)
 	{
 		return;
@@ -66,7 +69,8 @@ void decode(HuffmanNo *rt, int &idx, string str)
 	// found a leaf node
 	if (!rt->left && !rt->right)
 	{
-		cout << rt->reviewsText;
+		outputFile << rt->reviewsText;
+		//cout << rt->reviewsText;
 		return;
 	}
 
@@ -82,6 +86,59 @@ void decode(HuffmanNo *rt, int &idx, string str)
 void run(string txtParam, int n)
 {
 	ofstream outputFile("reviewsComp.bin", ios::out | ios::trunc | ios::binary);
+
+	string txt = txtParam;
+
+	unordered_map<char, int> frequency;
+	for (char reviewsText : txt)
+	{
+		frequency[reviewsText]++;
+	}
+
+	priority_queue<HuffmanNo *, vector<HuffmanNo *>, comparison> pq;
+
+	for (auto pair : frequency)
+	{
+		pq.push(getHuffmanNo(pair.first, pair.second, nullptr, nullptr));
+	}
+
+	while (pq.size() != 1)
+	{
+		HuffmanNo *left = pq.top();
+		pq.pop();
+		HuffmanNo *right = pq.top();
+		pq.pop();
+
+		int sum = left->frequency + right->frequency;
+		pq.push(getHuffmanNo('\0', sum, left, right));
+	}
+
+	HuffmanNo *rt = pq.top();
+
+	unordered_map<char, string> hfCode;
+	encode(rt, "", hfCode);
+
+	string str = "";
+
+	
+		for (char ch : txt)
+		{
+			str += hfCode[ch];
+		}
+	
+
+	
+		// write str in binary file
+		outputFile.write(str.c_str(), str.length());
+
+		// outputFile.write((char *)&str, sizeof(str));
+
+		cout << "Foi gerado o arquivo reviewsComp binario com sucesso!" << endl;
+	
+}
+
+void run2(string txtParam, int n)
+{
 	ifstream inputFile("reviewsComp.bin", ios::in | ios::binary);
 
 	string txt = txtParam;
@@ -116,9 +173,8 @@ void run(string txtParam, int n)
 	encode(rt, "", hfCode);
 
 	string str = "";
-	if (n == 2)
-	{
-		// str equals content in binary file
+
+	
 		inputFile.seekg(0, inputFile.end);
 		int length = inputFile.tellg();
 		inputFile.seekg(0, inputFile.beg);
@@ -126,37 +182,22 @@ void run(string txtParam, int n)
 		inputFile.read(buffer, length);
 		str = string(buffer, length);
 		delete[] buffer;
+	
 
-		cout << "Texto que veio do arquivo" << str << endl;
-	}
-	else
-	{
-		for (char ch : txt)
-		{
-			str += hfCode[ch];
-		}
-	}
-
-	if (n == 1)
-	{
-		// write str in binary file
-		outputFile.write(str.c_str(), str.length());
-
-		// outputFile.write((char *)&str, sizeof(str));
-
-		cout << "Foi gerado o arquivo reviewsComp binario com sucesso!" << endl;
-	}
-	else
-	{
 		int idx = -1;
 		while (idx < (int)str.size() - 2)
 		{
 			decode(rt, idx, str);
 		}
-	}
 }
 
 void Huffman::buildHuffmanTree(string text, int n)
 {
-	run(text, n);
+	if(n==1){
+		run(text, n);
+	}
+	
+	if(n==2){
+		run2(text, n);
+	}	
 }

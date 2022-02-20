@@ -97,8 +97,8 @@ void openFile(int i, string path)
 
     case 5:
 
-        cout << "1 - Comprimir um conjunto de dados e salvar em binario" << endl;
-        cout << "2 - Descomprimir um conjunto de dados e salvar em txt" << endl;
+        cout << "1 - Comprimir um conjunto de dados e salvar no arquivo reviewsComp" << endl;
+        cout << "2 - Descomprimir um conjunto de dados e salvar no arquivo reviewsOrig" << endl;
         cin >> n;
 
         file.generateTxtHuffman(n);

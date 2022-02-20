@@ -1029,7 +1029,7 @@ void File::generateTxtHuffman(int n)
         Review review2;
         for (int i = 0; i < tam; i++)
         {
-            long int result = 1 + (rand() % (tam - 1));
+            long int result = 1 + (rand() % (3660724 - 1));
             long int pos = (result - 1) * sizeof(Review);
             cout << result << endl;
             inputFile.seekg(pos);
@@ -1040,7 +1040,7 @@ void File::generateTxtHuffman(int n)
 
     Huffman huffman = Huffman();
 
-    huffman.buildHuffmanTree("Oi Allan teste De novo pra ver se funciona", n);
+    huffman.buildHuffmanTree("Se imprimir isso é pq funcionou", n);
 
     return;
 }
